@@ -1,6 +1,0 @@
-composer install
-composer update
-php artisan key:generate
-php artisan serve
-
-Revisar archivo .env para la bd

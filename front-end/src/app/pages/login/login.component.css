@@ -1,0 +1,32 @@
+#kt_body {
+    min-height: 100vh;
+}
+
+/* Centrar el popup del SweetAlert2 */
+.swal2-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Centrar el ícono dentro del popup */
+  .swal2-icon {
+    margin: 0 auto; /* Asegura que el ícono esté centrado horizontalmente */
+  }
+  
+  /* Ajusta el tamaño del ícono si es necesario */
+  .swal2-icon.swal2-success,
+  .swal2-icon.swal2-error,
+  .swal2-icon.swal2-warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px; /* Ajusta el tamaño según sea necesario */
+    height: 100px; /* Ajusta el tamaño según sea necesario */
+  }
+
+
+
+
