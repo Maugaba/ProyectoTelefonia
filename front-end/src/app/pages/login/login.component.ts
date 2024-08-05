@@ -40,8 +40,8 @@ export class LoginComponent {
         });
         // Almacenar los datos en el localStorage
         localStorage.setItem('angular17token', res.token);
-        localStorage.setItem('id_usuario', res.id_usuario.toString());
-        localStorage.setItem('nombre_usuario', res.nombre_usuario);
+        localStorage.setItem('user_id', res.user_id.toString());
+        localStorage.setItem('user_name', res.user_name);
         localStorage.setItem('rol', res.rol.toString());
         this.router.navigateByUrl('/dashboard');
       } else {
@@ -57,21 +57,22 @@ export class LoginComponent {
     }, error => {
       Swal.fire({
         icon: 'error',
-        title: 'Error de conexión',
-        text: 'No se pudo conectar con el servidor',
+        title: 'Error de inicio de sesión',
+        text: 'Credenciales inválidas' + error.message,
         customClass: {
           icon: 'icon-right'
         }
       });
     });
   }
+  
 }
 
 export class Login {
-  usuario: string;
+  user: string;
   password: string;
   constructor() {
-    this.usuario = '';
+    this.user = '';
     this.password = '';
   }
 }

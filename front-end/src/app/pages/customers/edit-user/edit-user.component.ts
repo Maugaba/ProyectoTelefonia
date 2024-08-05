@@ -3,40 +3,40 @@ import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UsuarioService } from '../usuario.service';
+import { UserService } from '../user.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-editar-usuario',
+  selector: 'app-edit-user',
   standalone: true,
-  templateUrl: './editar-usuario.component.html',
-  styleUrls: ['./editar-usuario.component.css'],
+  templateUrl: './edit-user.component.html',
+  styleUrls: ['./edit-user.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
-export class EditarUsuarioComponent implements OnInit {
-  usuarioForm: FormGroup;
-  usuarioId: number;
-  usuario: any;
+export class EditUserComponent implements OnInit {
+  userForm: FormGroup;
+  userId: number;
+  user: any;
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router,
-    private usuarioService: UsuarioService,
+    private userService: UserService,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.usuarioForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      correo_electronico: ['', [Validators.required, Validators.email]],
-      usuario: ['', Validators.required],
+    this.userForm = this.fb.group({
+      name: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      user: ['', Validators.required],
       id_rol: ['', Validators.required],
     });
 
     const navigation = this.router.getCurrentNavigation();
-    this.usuario = navigation?.extras?.state?.['usuario'];
-    this.usuarioId = this.usuario?.id || 0; // Inicializar usuarioId en el constructor
+    this.user = navigation?.extras?.state?.['user'];
+    this.userId = this.user?.id || 0; // Inicializar userId en el constructor
   }
 
   ngOnInit(): void {
@@ -45,30 +45,30 @@ export class EditarUsuarioComponent implements OnInit {
     script.type = 'text/javascript';
     this.renderer.appendChild(this.document.body, script);
 
-    if (this.usuario) {
-      this.usuarioForm.patchValue({
-        nombre: this.usuario.nombre,
-        apellido: this.usuario.apellido,
-        correo_electronico: this.usuario.correo_electronico,
-        usuario: this.usuario.usuario,
-        id_rol: this.usuario.id_rol
+    if (this.user) {
+      this.userForm.patchValue({
+        name: this.user.name,
+        lastname: this.user.lastname,
+        email: this.user.email,
+        user: this.user.user,
+        id_rol: this.user.id_rol
       });
     }
   }
 
   onSubmit(): void {
-    console.log('Formulario válido:', this.usuarioForm.valid);
-    console.log('Datos enviados:', this.usuarioForm.value); 
+    console.log('Formulario válido:', this.userForm.valid);
+    console.log('Datos enviados:', this.userForm.value); 
 
-    if (this.usuarioForm.valid) {
-      this.usuarioService.updateUsuario(this.usuarioId, this.usuarioForm.value).subscribe(
+    if (this.userForm.valid) {
+      this.userService.updateUser(this.userId, this.userForm.value).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',
             title: 'Usuario',
             text: 'Usuario actualizado correctamente'
           });
-          this.router.navigate(['/usuario']);
+          this.router.navigate(['/user']);
         },
         (error) => {
           console.error('Error actualizando usuario:', error);

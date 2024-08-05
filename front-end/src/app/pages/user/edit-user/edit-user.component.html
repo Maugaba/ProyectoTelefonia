@@ -6,26 +6,23 @@
     <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
       <!--begin::Header-->
       <!--end::Header-->
+      <!--begin::Content-->
       <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Subheader-->
         <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
           <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-            <!--begin::Info-->
             <div class="d-flex align-items-center flex-wrap mr-1">
-              <!--begin::Heading-->
               <div class="d-flex flex-column">
-                <h2 class="text-white font-weight-bold my-2 mr-5">Facultades</h2>
+                <h2 class="text-white font-weight-bold my-2 mr-5">Usuarios</h2>
                 <div class="d-flex align-items-center font-weight-bold my-2">
                   <a href="#" class="opacity-75 hover-opacity-100">
                     <i class="flaticon2-shelter text-white icon-1x"></i>
                   </a>
                   <span class="label label-dot label-sm bg-white opacity-75 mx-3"></span>
-                  <a href="#" class="text-white text-hover-white opacity-75 hover-opacity-100">Editar Facultad</a>
+                  <a href="#" class="text-white text-hover-white opacity-75 hover-opacity-100">Editar Usuario</a>
                 </div>
               </div>
-              <!--end::Heading-->
             </div>
-            <!--end::Info-->
           </div>
         </div>
         <!--end::Subheader-->
@@ -56,12 +53,24 @@
                               </div>
                               <div class="wizard-label">
                                 <h3 class="wizard-title">Datos generales</h3>
-                                <div class="wizard-desc">Detalles de la facultad</div>
+                                <div class="wizard-desc">Detalles de la persona</div>
                               </div>
                             </div>
                           </div>
                           <!--end::Wizard Step 1 Nav-->
                           <!--begin::Wizard Step 2 Nav-->
+                          <div class="wizard-step" data-wizard-type="step">
+                            <div class="wizard-wrapper">
+                              <div class="wizard-icon">
+                                <i class="wizard-check ki ki-check"></i>
+                                <span class="wizard-number">2</span>
+                              </div>
+                              <div class="wizard-label">
+                                <h3 class="wizard-title">Datos de autenticación</h3>
+                                <div class="wizard-desc">Detalles de usuario</div>
+                              </div>
+                            </div>
+                          </div>
                           <!--end::Wizard Step 2 Nav-->
                           <!--begin::Wizard Step 3 Nav-->
                           <div class="wizard-step" data-wizard-type="step">
@@ -92,43 +101,76 @@
                   <div class="wizard-content bg-gray-100 d-flex flex-column flex-row-fluid py-15 px-5 px-lg-10">
                     <!--begin::Form-->
                     <div class="d-flex justify-content-center flex-row-fluid">
-                      <form class="pb-5 w-100 w-md-450px w-lg-500px" [formGroup]="facultadForm" id="kt_form">
+                      <form class="pb-5 w-100 w-md-450px w-lg-500px" [formGroup]="userForm" id="kt_form" (ngSubmit)="onSubmit">
                         <!--begin: Wizard Step 1-->
                         <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
                           <!--begin::Title-->
                           <div class="pb-10 pb-lg-15">
-                            <h3 class="font-weight-bolder text-dark font-size-h2" id="txtLabel">Editar Facultad</h3>
+                            <h3 class="font-weight-bolder text-dark font-size-h2" id="txtLabel">Editar Usuario</h3>
                           </div>
                           <!--begin::Title-->
                           <!--begin::Form Group-->
                           <div class="form-group">
                             <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Nombre</label>
-                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" id="nombre" name="nombre" formControlName="nombre" placeholder="Nombre" />
+                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" formControlName="nombre" placeholder="Nombre" />
                           </div>
                           <!--end::Form Group-->
                           <!--begin::Form Group-->
                           <div class="form-group">
-                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Descripción</label>
-                            <input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" id="descripcion" name="descripcion" formControlName="descripcion" placeholder="Descripción" />
+                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Apellido</label>
+                            <input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" formControlName="apellido" placeholder="Apellido" />
+                          </div>
+                          <!--end::Form Group-->
+                          <!--begin::Form Group-->
+                          <div class="form-group">
+                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Correo Electrónico</label>
+                            <input type="email" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" formControlName="correo_electronico" placeholder="Correo Electrónico" />
                           </div>
                           <!--end::Form Group-->
                         </div>
                         <!--end: Wizard Step 1-->
                         <!--begin: Wizard Step 2-->
+                        <div class="pb-5" data-wizard-type="step-content">
+                          <!--begin::Title-->
+                          <div class="pb-10 pb-lg-15">
+                            <h3 class="font-weight-bolder text-dark font-size-h2">Datos de autenticación</h3>
+                          </div>
+                          <!--end::Title-->
+                          <!--begin::Form Group-->
+                          <div class="form-group">
+                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Usuario</label>
+                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" formControlName="usuario" placeholder="Usuario" />
+                          </div>
+                          <!--end::Form Group-->
+                          <!--begin::Form Group-->
+                          <div class="form-group">
+                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Rol</label>
+                            <input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" formControlName="id_rol" placeholder="Rol" />
+                          </div>
+                          <!--end::Form Group-->
+                        </div>
                         <!--end: Wizard Step 2-->
                         <!--begin: Wizard Step 3-->
                         <div class="pb-5" data-wizard-type="step-content">
                           <!--begin::Title-->
                           <div class="pb-10 pb-lg-15">
                             <h3 class="font-weight-bolder text-dark font-size-h2">Completado</h3>
-                            <div class="text-muted font-weight-bold font-size-h4">Facultad actualizada exitosamente!</div>
+                            <div class="text-muted font-weight-bold font-size-h4">¡Usuario editado correctamente!</div>
                           </div>
                           <!--end::Title-->
                           <!--begin::Section-->
                           <h4 class="font-weight-bolder mb-3">Datos generales:</h4>
                           <div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-                            <div>{{ facultadForm.value.nombre }}</div>
-                            <div>{{ facultadForm.value.descripcion }}</div>
+                            <div>{{ userForm.value.name }}</div>
+                            <div>{{ userForm.value.lastname }}</div>
+                            <div>{{ userForm.value.email }}</div>
+                          </div>
+                          <!--end::Section-->
+                          <!--begin::Section-->
+                          <h4 class="font-weight-bolder mb-3">Datos de autenticación:</h4>
+                          <div class="text-dark-50 font-weight-bold line-height-lg mb-8">
+                            <div>{{ userForm.value.user }}</div>
+                            <div>{{ userForm.value.id_rol }}</div>
                           </div>
                           <!--end::Section-->
                         </div>
@@ -150,7 +192,7 @@
                               </span>Anterior</button>
                           </div>
                           <div>
-                            <button type="button" class="btn btn-primary font-weight-bolder font-size-h6 pl-5 pr-8 py-4 my-3" data-wizard-type="action-submit" (ngSubmit)="onSubmit">Enviar
+                            <button type="submit" class="btn btn-primary font-weight-bolder font-size-h6 pl-5 pr-8 py-4 my-3" data-wizard-type="action-submit">Enviar
                               <span class="svg-icon svg-icon-md ml-2">
                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Right-2.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -193,6 +235,7 @@
         </div>
         <!--end::Entry-->
       </div>
+      <!--end::Content-->
       <!--begin::Footer-->
       <!--end::Footer-->
     </div>
@@ -201,7 +244,3 @@
   <!--end::Page-->
 </div>
 <!--end::Main-->
-
-
-
-

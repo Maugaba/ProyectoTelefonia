@@ -3,12 +3,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './service/auth.guard';
-import { UsuarioComponent } from './pages/usuario/usuario.component';
-import { CreateUsuarioComponent } from './pages/usuario/create-usuario/create-usuario.component';
-import { EditarUsuarioComponent } from './pages/usuario/editar-usuario/editar-usuario.component';
-import {FacultadesComponent} from  './pages/facultades/facultades.component';
-import {CrearFacultadComponent} from  './pages/facultades/crear-facultad/crear-facultad.component';
-import {EditarFacultadComponent} from  './pages/facultades/editar-facultad/editar-facultad.component';
+import { UserComponent } from './pages/user/user.component';
+import { CreateUserComponent } from './pages/user/create-user/create-user.component';
+import { EditUserComponent } from './pages/user/edit-user/edit-user.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,35 +20,20 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'usuarios',
-        component: UsuarioComponent,
+        path: 'user',
+        component: UserComponent,
         canActivate: [authGuard],
       },
       {
-        path: 'usuarios/crear',
-        component: CreateUsuarioComponent,
+        path: 'user/create',
+        component: CreateUserComponent,
         canActivate: [authGuard],
       },
       {
-        path: 'usuarios/editar',  
-        component: EditarUsuarioComponent,
+        path: 'user/edit',  
+        component: EditUserComponent,
         canActivate: [authGuard],
-      },
-      {
-        path: 'facultades',  
-        component: FacultadesComponent,
-        canActivate: [authGuard],
-      },
-      {
-        path: 'facultades/crear',  
-        component: CrearFacultadComponent,
-        canActivate: [authGuard],
-      },
-      {
-        path: 'facultades/editar', 
-        component: EditarFacultadComponent,
-        canActivate: [authGuard],
-      },
+      }
     ],
   },
 ];

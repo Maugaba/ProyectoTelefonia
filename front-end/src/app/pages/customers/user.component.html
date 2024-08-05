@@ -23,7 +23,7 @@
             <h3 class="card-label">Listado de usuarios</h3>
           </div>
           <div class="card-toolbar">
-            <button class="btn btn-primary font-weight-bolder" [routerLink]="['/usuarios/crear']"><i class="fas fa-book-reader"></i> Crear Nuevo Usuario</button>
+            <button class="btn btn-primary font-weight-bolder" [routerLink]="['/user/create']"><i class="fas fa-book-reader"></i> Crear Nuevo Usuario</button>
           </div>
         </div>
         <div class="card-body">
@@ -58,25 +58,25 @@
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Correo Electrónico</th>
+                <th>Dias laborales</th>
                 <th>Usuario</th>
                 <th>Rol</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let usuario of filteredUsuarios">
-                <td>{{ usuario.id }}</td>
-                <td>{{ usuario.nombre }}</td>
-                <td>{{ usuario.apellido }}</td>
-                <td>{{ usuario.correo_electronico }}</td>
-                <td>{{ usuario.usuario }}</td>              
-                <td>{{ usuario.rol }}</td>
+              <tr *ngFor="let user of filteredUsers">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.working_days }}</td>
+                <td>{{ user.user }}</td>              
+                <td>{{ user.rol }}</td>
                 <td>
-                  <button (click)="editUsuario(usuario)" class="btn btn-link btn-sm p-0">
+                  <button (click)="editUser(user)" class="btn btn-link btn-sm p-0">
                     <i class="far fa-edit"></i>
                   </button>
-                  <button (click)="changeEstado(usuario.id)" class="btn btn-link btn-sm p-0">
+                  <button (click)="changeState(user.id)" class="btn btn-link btn-sm p-0">
                     <i class="fas fa-exchange-alt"></i>
                   </button>                  
                 </td>

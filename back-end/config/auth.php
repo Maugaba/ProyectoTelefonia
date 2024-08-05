@@ -9,22 +9,22 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users', 
+            'provider' => 'Users', 
             'timeout' => 10800,
         ],
     ],
 
     'providers' => [
-        'users' => [
+        'Users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Usuarios::class,
+            'model' => App\Models\Users::class,
         ],
 
     ],
 
     'api' => [
         'driver' => 'sanctum',
-        'provider' => 'users',
+        'provider' => 'Users',
     ],
 ];
 

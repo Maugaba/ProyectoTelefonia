@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsuarioService } from '../usuario.service';
+import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
@@ -11,13 +11,13 @@ declare var KTWizard: any; // Declara la variable para evitar errores de TypeScr
 declare var KTUtil: any; // Declara la variable para evitar errores de TypeScript
 
 @Component({
-  selector: 'app-create-usuario', 
+  selector: 'app-create-user', 
   standalone: true,
-  templateUrl: './create-usuario.component.html',
-  styleUrls: ['./create-usuario.component.css'],
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
-export class CreateUsuarioComponent{
+export class CreateUserComponent{
   private _wizardObj: any;
   private _formEl: any;
 
@@ -39,12 +39,11 @@ export class CreateUsuarioComponent{
 
       // Validar el formulario en cada paso
       if (step === 1) {
-        const name = this.usuarioForm.value.name;
+        const name = this.userForm.value.name;
         const hasNumber = /\d/.test(name);
-        const lastname = this.usuarioForm.value.lastname;
+        const lastname = this.userForm.value.lastname;
         const hasNumberLastname = /\d/.test(lastname);
-        const email = this.usuarioForm.value.email;
-        const trueemail = /\S+@\S+\.\S+/.test(email);
+        const working_days = this.userForm.value.working_days;
         if (!name || hasNumber) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
@@ -63,18 +62,18 @@ export class CreateUsuarioComponent{
           });
           return;
         }
-        if (!trueemail || !email) {
+        if (!working_days) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese un correo electrónico válido'
+            text: 'Por favor, ingrese un horario válido'
           });
           return;
         }
       }
       if (step === 2) {
-        if (!this.usuarioForm.value.user) {
+        if (!this.userForm.value.user) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -83,7 +82,7 @@ export class CreateUsuarioComponent{
           });
           return;
         }
-        if (!this.usuarioForm.value.password) {
+        if (!this.userForm.value.password) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -92,7 +91,7 @@ export class CreateUsuarioComponent{
           });
           return;
         }
-        if (!this.usuarioForm.value.rol) {
+        if (!this.userForm.value.id_rol) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -105,9 +104,9 @@ export class CreateUsuarioComponent{
     });
 
     this._wizardObj.on('submit', (wizard: any) => {
-      console.log(this.usuarioForm.value);
-      if (this.usuarioForm.valid) {
-        this.usuarioService.createUsuario(this.usuarioForm.value).subscribe(
+      console.log(this.userForm.value);
+      if (this.userForm.valid) {
+        this.userService.createUser(this.userForm.value).subscribe(
           (response) => {
             if(response.status === 200) {
               Swal.fire({
@@ -115,7 +114,7 @@ export class CreateUsuarioComponent{
                 title: 'Usuario',
                 text: 'Usuario creado correctamente'
               });
-              this.router.navigate(['/usuarios']);
+              this.router.navigate(['/user']);
             }
             else {
               Swal.fire({
@@ -125,11 +124,11 @@ export class CreateUsuarioComponent{
               });
             }
           },
-          (error) => {
+          (response) => {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Ha ocurrido un error al crear el usuario' + error
+              text: 'Ha ocurrido un error al crear el usuario' + response.error.error
             });
           }
         );
@@ -144,22 +143,22 @@ export class CreateUsuarioComponent{
     });
   }
 
-  usuarioForm: FormGroup;
+  userForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private usuarioService: UsuarioService,
+    private userService: UserService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.usuarioForm = this.fb.group({
+    this.userForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      working_days: ['', Validators.required],
       user: ['', Validators.required],
       password: ['', Validators.required],
-      rol: ['', Validators.required],
+      id_rol: ['', Validators.required],
     });
   }
 }

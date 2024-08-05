@@ -12,9 +12,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 
     Route::prefix('users')->group(function () {
-        Route::post('/register', 'App\Http\Controllers\loginController@register')->name('register');
-        Route::post('/all', 'App\Http\Controllers\usuariosController@get_all')->name('usuarios.all');
-        Route::get('/change/{id}', 'App\Http\Controllers\usuariosController@change')->name('usuarios.change');
+        Route::post('/register', 'App\Http\Controllers\usersController@register')->name('register');
+        Route::post('/all', 'App\Http\Controllers\usersController@get_all')->name('usuarios.all');
+        Route::get('/change/{id}', 'App\Http\Controllers\usersController@change')->name('usuarios.change');
     });
     
     Route::prefix('roles')->group(function (){

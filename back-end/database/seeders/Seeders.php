@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
-use App\Models\Usuarios;
-use App\Models\Roles;
+use App\Models\Users;
+use App\Models\roles;
 
 class Seeders extends Seeder
 {
@@ -19,21 +19,25 @@ class Seeders extends Seeder
         Log::info('Seeder started...');
 
         try {
-            $rol = Roles::create([
-                'nombre' => 'Administrador',
-                'descripcion' => 'Administrador del sistema',
-                'v_modulo' => 1,
+            $rol = roles::create([
+                'name' => 'Administrador',
+                'description' => 'Administrador del sistema',
+                'v_module' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             Log::info('Rol creado: ' . $rol->id);
 
-            $usuario = Usuarios::create([
-                'nombre' => 'Admin',
-                'apellido' => 'Admin',
-                'usuario' => 'admin',
-                'contraseña' => bcrypt('admin'), 
-                'estado' => 'Activo', 
+            $usuario = Users::create([
+                'name' => 'Admin',
+                'lastname' => 'Admin',
+                'user' => 'admin',
+                'password' => bcrypt('admin'), 
+                'state' => 'Activo', 
                 'id_rol' => $rol->id,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             Log::info('Usuario creado: ' . $usuario->id);
