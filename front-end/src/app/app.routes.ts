@@ -7,6 +7,12 @@ import { UserComponent } from './pages/user/user.component';
 import { CreateUserComponent } from './pages/user/create-user/create-user.component';
 import { EditUserComponent } from './pages/user/edit-user/edit-user.component';
 
+import { CustomersComponent } from './pages/customers/customers.component';
+import { CreateCustomersComponent } from './pages/customers/create-customers/create-customers.component';
+import { EditCustomersComponent } from './pages/customers/edit-customers/edit-customers.component';
+
+
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -32,6 +38,21 @@ export const routes: Routes = [
       {
         path: 'user/edit',  
         component: EditUserComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'customers',
+        component: CustomersComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'customers/create',
+        component: CreateCustomersComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'customers/edit',  
+        component: EditCustomersComponent,
         canActivate: [authGuard],
       }
     ],

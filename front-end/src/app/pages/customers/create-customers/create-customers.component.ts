@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../user.service';
+import { CustomersService } from '../customers.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
@@ -11,13 +11,13 @@ declare var KTWizard: any; // Declara la variable para evitar errores de TypeScr
 declare var KTUtil: any; // Declara la variable para evitar errores de TypeScript
 
 @Component({
-  selector: 'app-create-user', 
+  selector: 'app-create-customers', 
   standalone: true,
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css'],
+  templateUrl: './create-customers.component.html',
+  styleUrls: ['./create-customers.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
-export class CreateUserComponent{
+export class CreateCustomersComponent{
   private _wizardObj: any;
   private _formEl: any;
 
@@ -39,11 +39,11 @@ export class CreateUserComponent{
 
       // Validar el formulario en cada paso
       if (step === 1) {
-        const name = this.userForm.value.name;
+        const name = this.customersForm.value.name;
         const hasNumber = /\d/.test(name);
-        const lastname = this.userForm.value.lastname;
+        const lastname = this.customersForm.value.lastname;
         const hasNumberLastname = /\d/.test(lastname);
-        const working_days = this.userForm.value.working_days;
+        const working_days = this.customersForm.value.working_days;
         if (!name || hasNumber) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
@@ -73,7 +73,7 @@ export class CreateUserComponent{
         }
       }
       if (step === 2) {
-        if (!this.userForm.value.user) {
+        if (!this.customersForm.value.user) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -82,7 +82,7 @@ export class CreateUserComponent{
           });
           return;
         }
-        if (!this.userForm.value.password) {
+        if (!this.customersForm.value.password) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -91,7 +91,7 @@ export class CreateUserComponent{
           });
           return;
         }
-        if (!this.userForm.value.id_rol) {
+        if (!this.customersForm.value.id_rol) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -104,14 +104,14 @@ export class CreateUserComponent{
     });
 
     this._wizardObj.on('submit', (wizard: any) => {
-      console.log(this.userForm.value);
-      if (this.userForm.valid) {
-        this.userService.createUser(this.userForm.value).subscribe(
+      console.log(this.customersForm.value);
+      if (this.customersForm.valid) {
+        this.userService.createUser(this.customersForm.value).subscribe(
           (response) => {
             if(response.status === 200) {
               Swal.fire({
                 icon: 'success',
-                title: 'Usuario',
+                title: 'Cliente',
                 text: 'Usuario creado correctamente'
               });
               this.router.navigate(['/user']);
@@ -120,7 +120,7 @@ export class CreateUserComponent{
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Ha ocurrido un error al crear el usuario' + response.error
+                text: 'Ha ocurrido un error al crear el cliente' + response.error
               });
             }
           },
@@ -128,7 +128,7 @@ export class CreateUserComponent{
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Ha ocurrido un error al crear el usuario' + response.error.error
+              text: 'Ha ocurrido un error al crear el cliente' + response.error.error
             });
           }
         );
@@ -143,16 +143,16 @@ export class CreateUserComponent{
     });
   }
 
-  userForm: FormGroup;
+  customersForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
+    private userService: CustomersService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.userForm = this.fb.group({
+    this.customersForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
       working_days: ['', Validators.required],
