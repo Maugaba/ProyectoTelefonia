@@ -3,30 +3,30 @@ import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../user.service';
+import { CustomersService } from '../customers.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-edit-user',
+  selector: 'app-edit-customers',
   standalone: true,
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css'],
+  templateUrl: './edit-customers.component.html',
+  styleUrls: ['./edit-customers.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
-export class EditUserComponent implements OnInit {
-  userForm: FormGroup;
-  userId: number;
-  user: any;
+export class EditCustomersComponent implements OnInit {
+  customersForm: FormGroup;
+  customersId: number;
+  customers: any;
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router,
-    private userService: UserService,
+    private customersService: CustomersService,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.userForm = this.fb.group({
+    this.customersForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -35,8 +35,8 @@ export class EditUserComponent implements OnInit {
     });
 
     const navigation = this.router.getCurrentNavigation();
-    this.user = navigation?.extras?.state?.['user'];
-    this.userId = this.user?.id || 0; // Inicializar userId en el constructor
+    this.customers = navigation?.extras?.state?.['user'];
+    this.customersId = this.customers?.id || 0; // Inicializar userId en el constructor
   }
 
   ngOnInit(): void {
@@ -45,23 +45,23 @@ export class EditUserComponent implements OnInit {
     script.type = 'text/javascript';
     this.renderer.appendChild(this.document.body, script);
 
-    if (this.user) {
-      this.userForm.patchValue({
-        name: this.user.name,
-        lastname: this.user.lastname,
-        email: this.user.email,
-        user: this.user.user,
-        id_rol: this.user.id_rol
+    if (this.customers) {
+      this.customersForm.patchValue({
+        name: this.customers.name,
+        lastname: this.customers.lastname,
+        email: this.customers.email,
+        user: this.customers.user,
+        id_rol: this.customers.id_rol
       });
     }
   }
 
   onSubmit(): void {
-    console.log('Formulario válido:', this.userForm.valid);
-    console.log('Datos enviados:', this.userForm.value); 
+    console.log('Formulario válido:', this.customersForm.valid);
+    console.log('Datos enviados:', this.customersForm.value); 
 
-    if (this.userForm.valid) {
-      this.userService.updateUser(this.userId, this.userForm.value).subscribe(
+    if (this.customersForm.valid) {
+      this.customersService.updateUser(this.customersId, this.customersForm.value).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',

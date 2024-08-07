@@ -6,15 +6,15 @@ import { API_URL } from '../../shared/constants/api_url';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  private allUrl = `${API_URL}/api/users/all`;
-  private createUrl = `${API_URL}/api/users/register`;
-  private changeUrl = `${API_URL}/api/users/change`;
-  private updateUrl = `${API_URL}/api/users/update/`;
+export class CustomersService {
+  private allUrl = `${API_URL}/api/customers/all`;
+  private createUrl = `${API_URL}/api/customers/register`;
+  private changeUrl = `${API_URL}/api/customers/change`;
+  private updateUrl = `${API_URL}/api/customers/update/`;
 
   constructor(private http: HttpClient) {}
 
-  getUsers(state: string): Observable<any> {
+  getCustomers(state: string): Observable<any> {
     const token = localStorage.getItem('angular17token');
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`)
