@@ -16,17 +16,14 @@ class customersController extends Controller
         $customers = customers::where('state', $state)->get();
         $data = [];
 
-        foreach ($customers as $customer) {
-            $rol = roles::findOrFail($customer->id_rol);
-            $rol_name = $rol->name; 
+        foreach ($customers as $customer) { 
             $model = [
                 "id" => $customer->id,
                 "name" => $customer->name,
-                "lastname" => $customer->lastname,
-                "user" => $customer->customer,
-                "working_days" => $customer->working_days,
+                "email" => $customer->email,
+                "phone" => $customer->phone,
+                "address" => $customer->address,
                 "state" => $customer->state,
-                "rol" => $rol_name,
                 "created_at" => $customer->created_at,
                 "updated_at" => $customer->updated_at
             ];
@@ -53,27 +50,25 @@ class customersController extends Controller
         try {
             $customer = new users();
             $customer->name = $_POST['name'];
-            $customer->lastname = $_POST['lastname'];
-            $customer->customer = $_POST['customer'];
-            $customer->password = bcrypt($_POST['password']);
-            $customer->id_rol = $_POST['id_rol'];
-            $customer->working_days = $_POST['working_days'];
+            $customer->email = $_POST['email'];
+            $customer->phone = $_POST['phone'];
+            $customer->address = bcrypt($_POST['address']);
             $customer->state = "Activo";
             $customer->save();
     
             return response()->json([
-                'success' => 'Usuario creado correctamente',
+                'success' => 'Cliente creado correctamente',
                 'status' => 200
             ], 200);
         } catch (QueryException $e) {
             return response()->json([
-                'message' => 'Error en la base de datos al crear el usuario',
+                'message' => 'Error en la base de datos al crear el cliente',
                 'error' => $e->getMessage(),
                 'status' => 500
             ], 500);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error inesperado al crear el usuario',
+                'message' => 'Error inesperado al crear el cliente',
                 'error' => $e->getMessage(),
                 'status' => 500
             ], 500);

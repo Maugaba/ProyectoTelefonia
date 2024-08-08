@@ -15,13 +15,13 @@
 					<div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
 					  <div class="d-flex align-items-center flex-wrap mr-1">
 						<div class="d-flex flex-column">
-						  <h2 class="text-white font-weight-bold my-2 mr-5">Usuarios</h2>
+						  <h2 class="text-white font-weight-bold my-2 mr-5">Clientes</h2>
 						  <div class="d-flex align-items-center font-weight-bold my-2">
 							<a href="#" class="opacity-75 hover-opacity-100">
 							  <i class="flaticon2-shelter text-white icon-1x"></i>
 							</a>
 							<span class="label label-dot label-sm bg-white opacity-75 mx-3"></span>
-							<a href="#" class="text-white text-hover-white opacity-75 hover-opacity-100">Crear usuario</a>
+							<a href="#" class="text-white text-hover-white opacity-75 hover-opacity-100">Crear cliente</a>
 						  </div>
 						</div>
 					  </div>
@@ -55,7 +55,7 @@
 															</div>
 															<div class="wizard-label">
 																<h3 class="wizard-title">Datos generales</h3>
-																<div class="wizard-desc">Detalles de la persona</div>
+																<div class="wizard-desc">Detalles del cliente</div>
 															</div>
 														</div>
 													</div>
@@ -68,8 +68,8 @@
 																<span class="wizard-number">2</span>
 															</div>
 															<div class="wizard-label">
-																<h3 class="wizard-title">Datos de autenticación</h3>
-																<div class="wizard-desc">Detalles de usuario</div>
+																<h3 class="wizard-title">Datos de contacto</h3>
+																<div class="wizard-desc">Detalles de contacto del cliente</div>
 															</div>
 														</div>
 													</div>
@@ -85,9 +85,15 @@
 																<h3 class="wizard-title">Completado!</h3>
 																<div class="wizard-desc">Verifica y envía</div>
 															</div>
-														</div>
+													<!--end::Title-->
+													<!--begin::Image_complete-->
+													<div class="pb-10 pb-lg-15">
+														<img src="../../../../../assets/media/imagenes/Complete.png" alt="complete" style="height: 70%; width: 70%;">
 													</div>
+												</div>
+												<!--end: Wizard Step 3-->
 													<!--end::Wizard Step 3 Nav-->
+													
 												</div>
 												<!--end::Wizard Steps-->
 											</div>
@@ -110,7 +116,7 @@
 												<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
 													<!--begin::Title-->
 													<div class="pb-10 pb-lg-15">
-														<h3 class="font-weight-bolder text-dark font-size-h2" id="txtLabel">Crear Cuenta</h3>															</div>
+														<h3 class="font-weight-bolder text-dark font-size-h2" id="txtLabel">Crear cliente</h3>															</div>
 													<!--begin::Title-->
 													<!--begin::Form Group-->
 													<div class="form-group">
@@ -120,15 +126,11 @@
 													<!--end::Form Group-->
 													<!--begin::Form Group-->
 													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Apellido *</label>
+														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Direccion *</label>
 														<input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="lastname" formControlName="lastname" placeholder="Apellido" value="" />
 													</div>
 													<!--end::Form Group-->
 													<!--begin::Form Group-->
-													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Dias de trabajo</label>
-														<input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="working_days" formControlName="working_days" placeholder="Correo" value="" />
-													</div>
 													<!--end::Form Group-->
 												</div>
 												<!--end: Wizard Step 1-->
@@ -136,12 +138,12 @@
 												<div class="pb-5" data-wizard-type="step-content">
 													<!--begin::Title-->
 													<div class="pb-10 pb-lg-15">
-														<h3 class="font-weight-bolder text-dark font-size-h2">Datos de autenticación</h3>
+														<h3 class="font-weight-bolder text-dark font-size-h2">Datos de contacto</h3>
 													</div>
 													<!--end::Title-->
 													<!--begin::Form Group-->
 													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Usuario *</label>
+														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Email *</label>
 														<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="user" formControlName="user" placeholder="Usuario" value="" />
 													</div>
 													<!--begin::Form Group-->
@@ -151,10 +153,7 @@
 													</div>
 													<!--begin::Form Group-->
 													<!--begin::Form Group-->
-													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Rol *</label>
-														<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="id_rol" formControlName="id_rol" placeholder="Rol" value="" />
-													</div>      
+													      
 													<!--begin::Row-->
 												</div>
 												<!--end: Wizard Step 2-->

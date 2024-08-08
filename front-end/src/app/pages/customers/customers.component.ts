@@ -42,16 +42,16 @@ export class CustomersComponent implements OnInit {
   filterCustomers(): void {
     this.filteredCustomers = this.customers.filter(customers => {
       const name = customers.name ? customers.name.toLowerCase() : '';
-      const lastname = customers.lastname ? customers.lastname.toLowerCase() : '';
-      const username = customers.user ? customers.customers.toLowerCase() : '';
       const email = customers.email ? customers.email.toLowerCase() : '';
+      const phone = customers.phone ? customers.phone.toLowerCase() : '';
+      const address = customers.address ? customers.address.toLowerCase() : '';
       
       const searchText = this.searchText.toLowerCase();
       
       return name.includes(searchText) ||
-             lastname.includes(searchText) ||
-             username.includes(searchText) ||
-             email.includes(searchText);
+             email.includes(searchText) ||
+             phone.includes(searchText) ||
+             address.includes(searchText);
     });
   }
   
