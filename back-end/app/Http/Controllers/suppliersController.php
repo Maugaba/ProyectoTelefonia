@@ -92,7 +92,6 @@ class suppliersController extends Controller
                 $supplier->contact_email = $_POST['contact_email'];
                 $supplier->contact_phone = $_POST['contact_phone'];
                 $supplier->address = $_POST['address'];
-                $supplier->state = $_POST['state'];
                 $supplier->save();
                 return response()->json(['success' => 'Proveedor actualizado correctamente', 'status' => 200],200);
             } catch (QueryException $e) {
