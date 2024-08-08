@@ -17,7 +17,7 @@
   </div>
   <div class="d-flex flex-column-fluid">
     <div class="container">
-      <div class="card card-custom">
+      <div class="card card-custom" >
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
           <div class="card-title">
             <h3 class="card-label">Listado de proveedores</h3>
@@ -42,7 +42,7 @@
                   <div class="col-md-4 my-2 my-md-0">
                     <div class="d-flex align-items-center">
                       <label class="mr-3 mb-0 d-none d-md-block">Estado:</label>
-                      <select class="form-control select2" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+                      <select class="form-control" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
                         <option value="Activo" selected>Activo</option>
                         <option value="Inactivo">Inactivo</option>
                       </select>
@@ -57,10 +57,10 @@
               <tr>
                 <th>Id</th>
                 <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Dias laborales</th>
-                <th>Usuario</th>
-                <th>Rol</th>
+                <th>Nombre de contacto</th>
+                <th>Correo de contacto</th>
+                <th>Teléfono de contacto</th>
+                <th>Direccion</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -68,10 +68,10 @@
               <tr *ngFor="let supplier of filteredSuppliers">
                 <td>{{ supplier.id }}</td>
                 <td>{{ supplier.name }}</td>
-                <td>{{ supplier.lastname }}</td>
-                <td>{{ supplier.working_days }}</td>
-                <td>{{ supplier.user }}</td>              
-                <td>{{ supplier.rol }}</td>
+                <td>{{ supplier.contact_name }}</td>
+                <td>{{ supplier.contact_email }}</td>
+                <td>{{ supplier.contact_phone }}</td>              
+                <td>{{ supplier.address }}</td>
                 <td>
                   <button (click)="editSupplier(supplier)" class="btn btn-link btn-sm p-0">
                     <i class="far fa-edit"></i>

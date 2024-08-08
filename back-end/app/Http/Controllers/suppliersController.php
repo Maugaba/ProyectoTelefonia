@@ -10,6 +10,7 @@ class suppliersController extends Controller
     {
         $state = $_POST['state'];
         $suppliers = Suppliers::where('state', $state)->get();
+        $data = [];
         foreach ($suppliers as $supplier) {
             $model = [
                 "id" => $supplier->id,
@@ -49,7 +50,7 @@ class suppliersController extends Controller
             $supplier->contact_email = $_POST['contact_email'];
             $supplier->contact_phone = $_POST['contact_phone'];
             $supplier->address = $_POST['address'];
-            $supplier->state = $_POST['state'];
+            $supplier->state = 'Activo';
             $supplier->save();
     
             return response()->json([

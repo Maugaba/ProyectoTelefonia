@@ -39,11 +39,9 @@ export class CreateSupplierComponent{
 
       // Validar el formulario en cada paso
       if (step === 1) {
+        const address = this.supplierForm.value.address;
         const name = this.supplierForm.value.name;
         const hasNumber = /\d/.test(name);
-        const lastname = this.supplierForm.value.lastname;
-        const hasNumberLastname = /\d/.test(lastname);
-        const working_days = this.supplierForm.value.working_days;
         if (!name || hasNumber) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
@@ -53,53 +51,51 @@ export class CreateSupplierComponent{
           });
           return;
         }
-        if (!lastname || hasNumberLastname) {
+        if (!address) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese un apellido válido'
-          });
-          return;
-        }
-        if (!working_days) {
-          wizard.stop(); // Detener la navegación
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Por favor, ingrese un horario válido'
+            text: 'Por favor, ingrese una dirección válida'
           });
           return;
         }
       }
       if (step === 2) {
-        if (!this.supplierForm.value.user) {
+        const contact_phone = this.supplierForm.value.contact_phone;
+        const contact_name = this.supplierForm.value.contact_name;
+        const hasletter = /[a-zA-Z]/.test(contact_phone);
+        const contact_email = this.supplierForm.value.contact_email;
+        const hasNumbercontactname = /\d/.test(contact_name);
+        const correctEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(contact_email);
+        if (!contact_name || hasNumbercontactname) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese un usuario válido'
+            text: 'Por favor, ingrese un nombre de contacto válido'
           });
           return;
         }
-        if (!this.supplierForm.value.password) {
+        if (!contact_email || !correctEmail) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese una contraseña válida'
+            text: 'Por favor, ingrese un correo de contacto válido'
           });
           return;
         }
-        if (!this.supplierForm.value.id_rol) {
+        if (!contact_phone || hasletter) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, seleccione un rol'
+            text: 'Por favor, ingrese un teléfono de contacto válido'
           });
           return;
         }
+        
       }
     });
 
@@ -114,7 +110,7 @@ export class CreateSupplierComponent{
                 title: 'Proveedor',
                 text: 'Proveedor creado correctamente'
               });
-              this.router.navigate(['/supplier']);
+              this.router.navigate(['/suppliers']);
             }
             else {
               Swal.fire({
@@ -154,11 +150,10 @@ export class CreateSupplierComponent{
   ) {
     this.supplierForm = this.fb.group({
       name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      working_days: ['', Validators.required],
-      user: ['', Validators.required],
-      password: ['', Validators.required],
-      id_rol: ['', Validators.required],
+      contact_name: ['', Validators.required],
+      contact_email: ['', Validators.required],
+      contact_phone: ['', Validators.required],
+      address: ['', Validators.required]
     });
   }
 }

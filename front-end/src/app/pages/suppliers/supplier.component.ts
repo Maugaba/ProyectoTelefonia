@@ -42,16 +42,18 @@ export class SupplierComponent implements OnInit {
   filterSuppliers(): void {
     this.filteredSuppliers = this.suppliers.filter(supplier => {
       const name = supplier.name ? supplier.name.toLowerCase() : '';
-      const lastname = supplier.lastname ? supplier.lastname.toLowerCase() : '';
-      const username = supplier.user ? supplier.user.toLowerCase() : '';
-      const email = supplier.email ? supplier.email.toLowerCase() : '';
+      const contact_name = supplier.contact_name ? supplier.contact_name.toLowerCase() : '';
+      const contact_email = supplier.contact_email ? supplier.contact_email.toLowerCase() : '';
+      const contact_phone = supplier.contact_phone ? supplier.contact_phone.toLowerCase() : '';
+      const address = supplier.address ? supplier.address.toLowerCase() : '';
       
       const searchText = this.searchText.toLowerCase();
       
       return name.includes(searchText) ||
-             lastname.includes(searchText) ||
-             username.includes(searchText) ||
-             email.includes(searchText);
+        contact_name.includes(searchText) ||
+        contact_email.includes(searchText) ||
+        contact_phone.includes(searchText) ||
+        address.includes(searchText);
     });
   }
   

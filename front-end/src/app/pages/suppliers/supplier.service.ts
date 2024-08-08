@@ -7,10 +7,10 @@ import { API_URL } from '../../shared/constants/api_url';
   providedIn: 'root'
 })
 export class SupplierService {
-  private allUrl = `${API_URL}/api/supplier/all`;
-  private createUrl = `${API_URL}/api/supplier/register`;
-  private changeUrl = `${API_URL}/api/supplier/change`;
-  private updateUrl = `${API_URL}/api/supplier/update/`;
+  private allUrl = `${API_URL}/api/suppliers/all`;
+  private createUrl = `${API_URL}/api/suppliers/register`;
+  private changeUrl = `${API_URL}/api/suppliers/change`;
+  private updateUrl = `${API_URL}/api/suppliers/update/`;
 
   constructor(private http: HttpClient) {}
 
@@ -40,11 +40,10 @@ export class SupplierService {
 
     const body = new HttpParams()
       .set('name', data.name)
-      .set('lastname', data.lastname)
-      .set('user', data.user)
-      .set('password', data.password)  
-      .set('working_days', data.working_days)
-      .set('id_rol', data.id_rol);
+      .set('contact_name', data.contact_name)
+      .set('contact_email', data.contact_email)
+      .set('contact_phone', data.contact_phone)  
+      .set('address', data.address)
 
     return this.http.post<any>(this.createUrl, body.toString(), { headers });
   }
@@ -61,10 +60,10 @@ export class SupplierService {
 
     const body = new HttpParams()
       .set('name', data.name)
-      .set('lastname', data.lastname)
-      .set('user', data.user)
-      .set('working_days', data.working_days)
-      .set('id_rol', data.id_rol);
+      .set('contact_name', data.contact_name)
+      .set('contact_email', data.contact_email)
+      .set('contact_phone', data.contact_phone)  
+      .set('address', data.address)
     return this.http.post<any>(`${this.updateUrl}${id}`, body.toString(), { headers });
   }
 
