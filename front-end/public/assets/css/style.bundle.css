@@ -4895,6 +4895,7 @@ input[type=button].btn-block {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
+  color: #3F4254; 
 }
 .nav-link:hover, .nav-link:focus {
   text-decoration: none;
@@ -83153,6 +83154,7 @@ body {
     position: relative;
     z-index: 2;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(254, 191, 96, 0.753);
   }
   .header .header-logo {
     padding: 0;
@@ -83182,6 +83184,7 @@ body {
     height: 80px;
     -webkit-animation: header-minimize-animation 0.5s ease 1;
     animation: header-minimize-animation 0.5s ease 1;
+    background-color: rgba(62, 168, 145, 0.753);
   }
   .header-fixed[data-header-scroll=on] .header .logo-default {
     display: none;

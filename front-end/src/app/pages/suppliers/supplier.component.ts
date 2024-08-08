@@ -70,7 +70,7 @@ export class SupplierComponent implements OnInit {
         supplier
       }
     };
-    this.router.navigate(['/supplier/edit'], navigationExtras);
+    this.router.navigate(['/suppliers/edit'], navigationExtras);
   }
 
   changeState(id: number): void {
