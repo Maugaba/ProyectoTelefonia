@@ -16,9 +16,9 @@ import { EditCustomersComponent } from './pages/customers/edit-customers/edit-cu
 
 
 //Suppliers Routes
-import { SuppliersComponent } from './pages/suppliers/suppliers.component';
-import { CreateSuppliersComponent } from './pages/suppliers/create-suppliers/create-suppliers.component';
-import { EditSuppliersComponent } from './pages/suppliers/edit-suppliers/edit-suppliers.component';
+import { SupplierComponent } from './pages/suppliers/supplier.component';
+import { CreateSupplierComponent } from './pages/suppliers/create-supplier/create-supplier.component';
+import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supplier.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -64,17 +64,17 @@ export const routes: Routes = [
       },
       {
         path: 'suppliers',
-        component: SuppliersComponent,
+        component: SupplierComponent,
         canActivate: [authGuard],
       },
       {
         path: 'suppliers/create',
-        component: CreateSuppliersComponent,
+        component: CreateSupplierComponent,
         canActivate: [authGuard],
       },
       {
         path: 'suppliers/edit',
-        component: EditSuppliersComponent,
+        component: EditSupplierComponent,
         canActivate: [authGuard],
       },
     ],
