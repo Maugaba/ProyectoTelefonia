@@ -17,9 +17,17 @@ declare var KTUtil: any; // Declara la variable para evitar errores de TypeScrip
   styleUrls: ['./create-user.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
-export class CreateUserComponent{
+export class CreateUserComponent implements OnInit {
   private _wizardObj: any;
   private _formEl: any;
+
+  ngOnInit() {
+    // Inicialización del formulario con valores predeterminados
+    this.userForm.patchValue({
+      id_rol: 1, // Establecer el rol por defecto en 1
+      state: true // Establecer el estado por defecto en activo
+    });
+  }
 
   ngAfterViewInit(): void {
     this.initWizard();
@@ -91,15 +99,16 @@ export class CreateUserComponent{
           });
           return;
         }
-        if (!this.userForm.value.id_rol) {
-          wizard.stop(); // Detener la navegación
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Por favor, seleccione un rol'
-          });
-          return;
-        }
+        // El rol siempre es 1, así que no es necesario validar su existencia
+        // if (!this.userForm.value.id_rol) {
+        //   wizard.stop(); // Detener la navegación
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'Error',
+        //     text: 'Por favor, seleccione un rol'
+        //   });
+        //   return;
+        // }
       }
     });
 
@@ -155,10 +164,11 @@ export class CreateUserComponent{
     this.userForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
-      working_days: ['', Validators.required],
       user: ['', Validators.required],
+      working_days: ['', Validators.required],
       password: ['', Validators.required],
-      id_rol: ['', Validators.required],
+      id_rol: [1, Validators.required], // Valor por defecto para el rol
+      state: [true] // Valor por defecto para el estado
     });
   }
 }

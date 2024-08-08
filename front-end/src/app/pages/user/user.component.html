@@ -39,15 +39,6 @@
                       </span>
                     </div>
                   </div>
-                  <div class="col-md-4 my-2 my-md-0">
-                    <div class="d-flex align-items-center">
-                      <label class="mr-3 mb-0 d-none d-md-block">Estado:</label>
-                      <select class="form-control select2" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
-                        <option value="Activo" selected>Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                      </select>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -58,8 +49,8 @@
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Dias laborales</th>
                 <th>Usuario</th>
+                <th>Dias laborales</th>
                 <th>Rol</th>
                 <th>Acciones</th>
               </tr>
@@ -69,8 +60,8 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.lastname }}</td>
+                <td>{{ user.user }}</td>       
                 <td>{{ user.working_days }}</td>
-                <td>{{ user.user }}</td>              
                 <td>{{ user.rol }}</td>
                 <td>
                   <button (click)="editUser(user)" class="btn btn-link btn-sm p-0">

@@ -1,4 +1,4 @@
-<link href="../../../../../public/assets/css/pages/wizard/wizard-5.css" rel="stylesheet" type="text/css" />
+	<link href="../../../../../public/assets/css/pages/wizard/wizard-5.css" rel="stylesheet" type="text/css" />
 <div class="d-flex flex-column flex-root">
 	<!--begin::Page-->
 	<div class="d-flex flex-row flex-column-fluid page">
@@ -121,17 +121,19 @@
 													<!--begin::Form Group-->
 													<div class="form-group">
 														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Apellido *</label>
-														<input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="lastname" formControlName="lastname" placeholder="Apellido" value="" />
+														<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="lastname" formControlName="lastname" placeholder="Apellido" value="" />
 													</div>
 													<!--end::Form Group-->
 													<!--begin::Form Group-->
 													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Dias de trabajo</label>
-														<input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="working_days" formControlName="working_days" placeholder="Correo" value="" />
+														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Días de trabajo</label>
+														<input type="number" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="working_days" formControlName="working_days" placeholder="0" value="" min="0" />
 													</div>
 													<!--end::Form Group-->
 												</div>
 												<!--end: Wizard Step 1-->
+
+
 												<!--begin: Wizard Step 2-->
 												<div class="pb-5" data-wizard-type="step-content">
 													<!--begin::Title-->
@@ -141,51 +143,35 @@
 													<!--end::Title-->
 													<!--begin::Form Group-->
 													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Usuario *</label>
+														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Nombre de Usuario *</label>
 														<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="user" formControlName="user" placeholder="Usuario" value="" />
 													</div>
+													<!--end::Form Group-->
 													<!--begin::Form Group-->
 													<div class="form-group">
 														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Contraseña *</label>
-														<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="password" formControlName="password" placeholder="Contraseña" value="" />
+														<input type="text" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="password" formControlName="password" placeholder="Contraseña" value="" />
 													</div>
-													<!--begin::Form Group-->
-													<!--begin::Form Group-->
-													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Rol *</label>
-														<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="id_rol" formControlName="id_rol" placeholder="Rol" value="" />
-													</div>      
-													<!--begin::Row-->
+													<!--end::Form Group-->
 												</div>
 												<!--end: Wizard Step 2-->
+
+
 												<!--begin: Wizard Step 3-->
 												<div class="pb-5" data-wizard-type="step-content">
 													<!--begin::Title-->
 													<div class="pb-10 pb-lg-15">
 														<h3 class="font-weight-bolder text-dark font-size-h2">Completado</h3>
-														<div class="text-muted font-weight-bold font-size-h4">Cuenta creada exitosamente!</div>
+														<div class="text-muted font-weight-bold font-size-h4">Revisa tus datos!</div>
 													</div>
 													<!--end::Title-->
-													<!--begin::Section-->
-													<h4 class="font-weight-bolder mb-3">Datos generales:</h4>
-													<div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-														<div>Nick Stone</div>
-														<div>+12233434-34</div>
-														<div>nick.stonegmail.com</div>
+													<!--begin::Image_complete-->
+													<div class="pb-10 pb-lg-15">
+														<img src="../../../../../assets/media/imagenes/Complete.png" alt="complete" style="height: 70%; width: 70%;">
 													</div>
-													<!--end::Section-->
-													<!--begin::Section-->
-													<h4 class="font-weight-bolder mb-3">Datos de autenticación:</h4>
-													<div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-														<div>Address Line 1</div>
-														<div>Address Line 2</div>
-														<div>Melbourne 3000, VIC, Australia</div>
-													</div>
-													<!--end::Section-->
-													<!--begin::Section-->
-													<!--end::Section-->
 												</div>
 												<!--end: Wizard Step 3-->
+
 												<!--begin: Wizard Actions-->
 												<div class="d-flex justify-content-between pt-3">
 													<div class="mr-2">
