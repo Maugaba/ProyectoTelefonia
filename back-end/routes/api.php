@@ -20,4 +20,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('roles')->group(function (){
         Route::get('/all', 'App\Http\Controllers\rolesController@get_rol')->name('get.rol');
     });
+
+    Route::prefix('suppliers')->group(function () {
+        Route::post('/all', 'App\Http\Controllers\suppliersController@get_all')->name('suppliers.all');
+        Route::post('/register', 'App\Http\Controllers\suppliersController@register')->name('suppliers.register');
+        Route::get('/change/{id}', 'App\Http\Controllers\suppliersController@change')->name('suppliers.change');
+        Route::post('/update/{id}', 'App\Http\Controllers\suppliersController@update')->name('suppliers.update');
+    });
 });
