@@ -56,7 +56,7 @@ export class CreateCustomersComponent{
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese un horario válido'
+            text: 'Por favor, ingrese una direccion válido'
           });
           return;
         }
@@ -66,38 +66,37 @@ export class CreateCustomersComponent{
         const email = this.customersForm.value.email;
         const correctEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
         const hasletter = /[a-zA-Z]/.test(phone);
-        if (!email || correctEmail) {
+        if (!email || !correctEmail) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese un usuario válido'
+            text: 'Por favor, ingrese un correo válido'
           });
           return;
         }
-        if (!phone || correctEmail) {
+        if (!phone || hasletter) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese una contraseña válida'
+            text: 'Por favor, ingrese una numero de telefono válido'
           });
           return;
         }
       
       }
     });
-
     this._wizardObj.on('submit', (wizard: any) => {
       console.log(this.customersForm.value);
       if (this.customersForm.valid) {
-        this.customersService.createUser(this.customersForm.value).subscribe(
+        this.customersService.createCustomers(this.customersForm.value).subscribe(
           (response) => {
             if(response.status === 200) {
               Swal.fire({
                 icon: 'success',
                 title: 'Cliente',
-                text: 'Usuario creado correctamente'
+                text: 'Cliente creado correctamente'
               });
               this.router.navigate(['/customers']);
             }

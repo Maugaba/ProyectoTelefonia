@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -28,7 +29,7 @@ export class CustomersService {
     );
   }
 
-  createUser(data: any): Observable<any> {
+  createCustomers(data: any): Observable<any> {
     const token = localStorage.getItem('angular17token');
     if (!token) {
       throw new Error('Token not found');
@@ -48,7 +49,7 @@ export class CustomersService {
     return this.http.post<any>(this.createUrl, body.toString(), { headers });
   }
 
-  updateUser(id: number, data: any): Observable<any> {
+  updateCustomers(id: number, data: any): Observable<any> {
     const token = localStorage.getItem('angular17token');
     if (!token) {
       throw new Error('Token not found');

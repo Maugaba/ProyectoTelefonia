@@ -28,10 +28,9 @@ export class EditCustomersComponent implements OnInit {
   ) {
     this.customersForm = this.fb.group({
       name: ['', Validators.required],
-      lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      user: ['', Validators.required],
-      id_rol: ['', Validators.required],
+      phone: ['', Validators.required],
+      address: ['', Validators.required],
     });
 
     const navigation = this.router.getCurrentNavigation();
@@ -48,10 +47,9 @@ export class EditCustomersComponent implements OnInit {
     if (this.customers) {
       this.customersForm.patchValue({
         name: this.customers.name,
-        lastname: this.customers.lastname,
         email: this.customers.email,
-        user: this.customers.user,
-        id_rol: this.customers.id_rol
+        phone: this.customers.phone,
+        address: this.customers.address
       });
     }
   }
@@ -61,17 +59,17 @@ export class EditCustomersComponent implements OnInit {
     console.log('Datos enviados:', this.customersForm.value); 
 
     if (this.customersForm.valid) {
-      this.customersService.updateUser(this.customersId, this.customersForm.value).subscribe(
+      this.customersService.updateCustomers(this.customersId, this.customersForm.value).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',
-            title: 'Usuario',
-            text: 'Usuario actualizado correctamente'
+            title: 'Cliente',
+            text: 'Cliente actualizado correctamente'
           });
-          this.router.navigate(['/user']);
+          this.router.navigate(['/customers']);
         },
         (error) => {
-          console.error('Error actualizando usuario:', error);
+          console.error('Error actualizando cliente:', error);
         }
       );
     }

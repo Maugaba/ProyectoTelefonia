@@ -13,7 +13,7 @@ class customersController extends Controller
     public function get_all()
     {
         $state = $_POST['state'];
-        $customers = customers::where('state', $state)->get();
+        $customers = Customers::where('state', $state)->get();
         $data = [];
 
         foreach ($customers as $customer) { 
@@ -45,14 +45,14 @@ class customersController extends Controller
         return response()->json($response);
     }
 
-    public function register()
+    public function register(Request $request)
     {
         try {
-            $customer = new users();
+            $customer = new Customers();
             $customer->name = $_POST['name'];
             $customer->email = $_POST['email'];
             $customer->phone = $_POST['phone'];
-            $customer->address = bcrypt($_POST['address']);
+            $customer->address = $_POST['address'];
             $customer->state = "Activo";
             $customer->save();
     
@@ -74,10 +74,35 @@ class customersController extends Controller
             ], 500);
         }
     }
-
+    public function update(Request $request, $id){
+        $customers = Customers::findOrFail($id);
+        if($customers){
+            try {
+                $customer->name = $_POST['name'];
+                $customer->email = $_POST['email'];
+                $customer->phone = $_POST['phone'];
+                $customer->address = $_POST['address'];
+                $customer->save();
+                return response()->json(['success' => 'Cliente actualizado correctamente', 'status' => 200],200);
+            } catch (QueryException $e) {
+                return response()->json([
+                    'message' => 'Error en la base de datos al actualizar el cliente',
+                    'error' => $e->getMessage(),
+                    'status' => 500
+                ], 500);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Error inesperado al actualizar el cliente',
+                    'error' => $e->getMessage(),
+                    'status' => 500
+                ], 500);
+            }
+        }
+        return response()->json(['message' => 'Error al actualizar el cliente', 'status' => 401],401);
+    }
     public function change($id)
     {
-        $customer = users::findOrFail($id);
+        $customer = Customers::findOrFail($id);
         if($customer){
             $customer->state = $customer->state == 'Activo' ? 'Inactivo' : 'Activo';
             $customer->save();
