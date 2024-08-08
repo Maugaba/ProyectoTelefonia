@@ -34,4 +34,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/change/{id}', 'App\Http\Controllers\productsController@change')->name('products.change');
         Route::post('/update/{id}', 'App\Http\Controllers\productsController@update')->name('products.update');
     });
+    
+    Route::prefix('customers')->group(function () {
+        Route::post('/all', 'App\Http\Controllers\customersController@get_all')->name('customers.all');
+        Route::post('/register', 'App\Http\Controllers\customersController@register')->name('customers.register');
+        Route::get('/change/{id}', 'App\Http\Controllers\customersController@change')->name('customers.change');
+        Route::post('/update/{id}', 'App\Http\Controllers\customersController@update')->name('customers.update');
+    });
 });
