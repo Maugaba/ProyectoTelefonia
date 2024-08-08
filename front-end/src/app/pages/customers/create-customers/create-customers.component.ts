@@ -40,10 +40,8 @@ export class CreateCustomersComponent{
       // Validar el formulario en cada paso
       if (step === 1) {
         const name = this.customersForm.value.name;
+        const address = this.customersForm.value.address;
         const hasNumber = /\d/.test(name);
-        const lastname = this.customersForm.value.lastname;
-        const hasNumberLastname = /\d/.test(lastname);
-        const working_days = this.customersForm.value.working_days;
         if (!name || hasNumber) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
@@ -53,16 +51,7 @@ export class CreateCustomersComponent{
           });
           return;
         }
-        if (!lastname || hasNumberLastname) {
-          wizard.stop(); // Detener la navegación
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Por favor, ingrese un apellido válido'
-          });
-          return;
-        }
-        if (!working_days) {
+        if (!address) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -73,7 +62,11 @@ export class CreateCustomersComponent{
         }
       }
       if (step === 2) {
-        if (!this.customersForm.value.user) {
+        const phone = this.customersForm.value.phone;
+        const email = this.customersForm.value.email;
+        const correctEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
+        const hasletter = /[a-zA-Z]/.test(phone);
+        if (!email || correctEmail) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -82,7 +75,7 @@ export class CreateCustomersComponent{
           });
           return;
         }
-        if (!this.customersForm.value.password) {
+        if (!phone || correctEmail) {
           wizard.stop(); // Detener la navegación
           Swal.fire({
             icon: 'error',
@@ -91,22 +84,14 @@ export class CreateCustomersComponent{
           });
           return;
         }
-        if (!this.customersForm.value.id_rol) {
-          wizard.stop(); // Detener la navegación
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Por favor, seleccione un rol'
-          });
-          return;
-        }
+      
       }
     });
 
     this._wizardObj.on('submit', (wizard: any) => {
       console.log(this.customersForm.value);
       if (this.customersForm.valid) {
-        this.userService.createUser(this.customersForm.value).subscribe(
+        this.customersService.createUser(this.customersForm.value).subscribe(
           (response) => {
             if(response.status === 200) {
               Swal.fire({
@@ -114,7 +99,7 @@ export class CreateCustomersComponent{
                 title: 'Cliente',
                 text: 'Usuario creado correctamente'
               });
-              this.router.navigate(['/user']);
+              this.router.navigate(['/customers']);
             }
             else {
               Swal.fire({
@@ -147,18 +132,16 @@ export class CreateCustomersComponent{
 
   constructor(
     private fb: FormBuilder,
-    private userService: CustomersService,
+    private customersService: CustomersService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.customersForm = this.fb.group({
       name: ['', Validators.required],
-      lastname: ['', Validators.required],
-      working_days: ['', Validators.required],
-      user: ['', Validators.required],
-      password: ['', Validators.required],
-      id_rol: ['', Validators.required],
+      email: ['', Validators.required],
+      phone: ['', Validators.required],
+      address: ['', Validators.required],
     });
   }
 }

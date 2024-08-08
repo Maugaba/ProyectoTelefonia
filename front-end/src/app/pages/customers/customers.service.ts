@@ -40,11 +40,10 @@ export class CustomersService {
 
     const body = new HttpParams()
       .set('name', data.name)
-      .set('lastname', data.lastname)
-      .set('user', data.user)
-      .set('password', data.password)  
-      .set('working_days', data.working_days)
-      .set('id_rol', data.id_rol);
+      .set('email', data.email)
+      .set('phone', data.phone)
+      .set('address', data.address)  
+    
 
     return this.http.post<any>(this.createUrl, body.toString(), { headers });
   }
@@ -61,10 +60,10 @@ export class CustomersService {
 
     const body = new HttpParams()
       .set('name', data.name)
-      .set('lastname', data.lastname)
-      .set('user', data.user)
-      .set('working_days', data.working_days)
-      .set('id_rol', data.id_rol);
+      .set('email', data.email)
+      .set('phone', data.phone)
+      .set('address', data.address)
+    
     return this.http.post<any>(`${this.updateUrl}${id}`, body.toString(), { headers });
   }
 
