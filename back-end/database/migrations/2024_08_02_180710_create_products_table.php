@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 10, 2);
             $table->integer('quantity');
             $table->string('sku')->unique();
-            $table->enum('type', ['perecedero', 'no perecedero']);
+            $table->enum('type', ['Perecedero', 'No perecedero']);
             $table->foreignId('supplier_id')->references('id')->on('suppliers');
             $table->string('state')->nullable();
             $table->timestamps();
