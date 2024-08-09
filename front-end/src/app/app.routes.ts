@@ -22,7 +22,7 @@ import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supp
 
 //Products Routes
 import { ProductComponent } from './pages/products/product.component';
-//import { CreateSupplierComponent } from './pages/suppliers/create-supplier/create-supplier.component';
+import { CreateProductComponent } from './pages/products/create-product/create-product.component';
 //import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supplier.component';
 
 export const routes: Routes = [
@@ -88,12 +88,12 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'suppliers/create',
-        component: CreateSupplierComponent,
+        path: 'products/create',
+        component: CreateProductComponent,
         canActivate: [authGuard],
       },
       {
-        path: 'suppliers/edit',
+        path: 'products/edit',
         component: EditSupplierComponent,
         canActivate: [authGuard],
       },

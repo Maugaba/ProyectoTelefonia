@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Products;
 use Illuminate\Database\QueryException;
 class productsController extends Controller
@@ -43,7 +44,7 @@ class productsController extends Controller
         return response()->json($response);
     }
 
-    public function register()
+    public function register(Request $request)
     {
         try {
             $product = new Products();
@@ -87,7 +88,7 @@ class productsController extends Controller
         return response()->json(['message' => 'Error al actualizar el estado', 'status' => 401],401);
     }
 
-    public function update($id){
+    public function update(Request $request, $id){
         $product = Products::findOrFail($id);
         if($product){
             try {
