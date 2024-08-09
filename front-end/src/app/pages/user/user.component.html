@@ -39,6 +39,15 @@
                       </span>
                     </div>
                   </div>
+                  <div class="col-md-4 my-2 my-md-0">
+                    <div class="d-flex align-items-center">
+                      <label class="mr-3 mb-0 d-none d-md-block">Estado:</label>
+                      <select class="form-control" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+                        <option value="Activo" selected>Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

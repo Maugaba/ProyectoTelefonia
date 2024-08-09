@@ -31,7 +31,6 @@ export class ProductComponent implements OnInit {
         this.products = data.data;
         this.filteredProducts = this.products;
         this.filterProducts();
-        console.log('Products:', this.products);
       },
       (error) => {
         console.error('Error fetching products:', error);
@@ -47,7 +46,7 @@ export class ProductComponent implements OnInit {
       const quantity = product.quantity ? product.quantity.toLowerCase() : '';
       const sku = product.sku ? product.sku.toLowerCase() : '';
       const type = product.type ? product.type.toLowerCase() : '';
-      const supplier_id = product.supplier_id ? product.supplier_id.toLowerCase() : '';
+      const supplier_id = product.supplier_id;
       
       const searchText = this.searchText.toLowerCase();
       

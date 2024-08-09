@@ -31,7 +31,6 @@ export class UserComponent implements OnInit {
         this.users = data.data;
         this.filteredUsers = this.users;
         this.filterUsers();
-        console.log('Users:', this.users);
       },
       (error) => {
         console.error('Error fetching users:', error);

@@ -28,7 +28,7 @@ export class UserService {
     );
   }
 
-  createUser(data: any): Observable<any> {
+  createUser(data: any, working_days: any): Observable<any> {
     const token = localStorage.getItem('angular17token');
     if (!token) {
       throw new Error('Token not found');
@@ -43,13 +43,13 @@ export class UserService {
       .set('lastname', data.lastname)
       .set('user', data.user)
       .set('password', data.password)  
-      .set('working_days', data.working_days)
+      .set('working_days', working_days)
       .set('id_rol', data.id_rol);
 
     return this.http.post<any>(this.createUrl, body.toString(), { headers });
   }
 
-  updateUser(id: number, data: any): Observable<any> {
+  updateUser(id: number, data: any, working_days: any): Observable<any> {
     const token = localStorage.getItem('angular17token');
     if (!token) {
       throw new Error('Token not found');
@@ -63,7 +63,7 @@ export class UserService {
       .set('name', data.name)
       .set('lastname', data.lastname)
       .set('user', data.user)
-      .set('working_days', data.working_days)
+      .set('working_days', working_days)
       .set('id_rol', data.id_rol);
     return this.http.post<any>(`${this.updateUrl}${id}`, body.toString(), { headers });
   }

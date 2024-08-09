@@ -31,7 +31,6 @@ export class CustomersComponent implements OnInit {
         this.customers = data.data;
         this.filteredCustomers = this.customers;
         this.filterCustomers();
-        console.log('Customers:', this.customers);
       },
       (error) => {
         console.error('Error fetching customers:', error);

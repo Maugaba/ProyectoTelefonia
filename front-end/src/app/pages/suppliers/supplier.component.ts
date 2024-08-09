@@ -31,7 +31,6 @@ export class SupplierComponent implements OnInit {
         this.suppliers = data.data;
         this.filteredSuppliers = this.suppliers;
         this.filterSuppliers();
-        console.log('Suppliers:', this.suppliers);
       },
       (error) => {
         console.error('Error fetching suppliers:', error);

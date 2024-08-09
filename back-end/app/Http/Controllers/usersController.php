@@ -93,14 +93,13 @@ class usersController extends Controller
 
     //PUT
     public function update($id){
-        $user = Suppliers::findOrFail($id);
+        $user = users::findOrFail($id);
         if($user){
             try {
                 $user->name = $_POST['name'];
                 $user->lastname = $_POST['lastname'];
                 $user->user = $_POST['user'];
                 $user->working_days = $_POST['working_days'];
-                $user->rol = $_POST['rol'];
                 $user->save();
                 return response()->json(['success' => 'Proveedor actualizado correctamente', 'status' => 200],200);
             } catch (QueryException $e) {

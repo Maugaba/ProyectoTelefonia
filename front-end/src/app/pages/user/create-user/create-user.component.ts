@@ -1,9 +1,9 @@
 import { Component, OnInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import Swal from 'sweetalert2';
 
 
@@ -113,9 +113,11 @@ export class CreateUserComponent implements OnInit {
     });
 
     this._wizardObj.on('submit', (wizard: any) => {
-      console.log(this.userForm.value);
       if (this.userForm.valid) {
-        this.userService.createUser(this.userForm.value).subscribe(
+        const workingDays = this.workingDaysArray.controls.map(control => {
+          return `${control.value.day}:${control.value.hours}`;
+        }).join(', ');
+        this.userService.createUser(this.userForm.value, workingDays).subscribe(
           (response) => {
             if(response.status === 200) {
               Swal.fire({
@@ -152,6 +154,37 @@ export class CreateUserComponent implements OnInit {
     });
   }
 
+  get workingDaysArray() {
+    return this.userForm.get('working_days') as FormArray;
+  }
+  
+  addWorkingDay(day: string, hours: number) {
+    const totalHours = this.getTotalHours() + hours;
+    if (totalHours > 40) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Las horas totales no pueden exceder 40 horas'
+      });
+      return;
+    }
+    
+    this.workingDaysArray.push(this.fb.group({
+      day: [day, Validators.required],
+      hours: [hours, [Validators.required, Validators.min(1)]]
+    }));
+  }
+  
+  removeWorkingDay(index: number) {
+    this.workingDaysArray.removeAt(index);
+  }
+  
+  getTotalHours() {
+    return this.workingDaysArray.controls
+      .map(control => control.value.hours)
+      .reduce((a, b) => a + b, 0);
+  }
+
   userForm: FormGroup;
 
   constructor(
@@ -165,10 +198,10 @@ export class CreateUserComponent implements OnInit {
       name: ['', Validators.required],
       lastname: ['', Validators.required],
       user: ['', Validators.required],
-      working_days: ['', Validators.required],
+      working_days: this.fb.array([], Validators.required), // Cambiar para manejar los días de trabajo
       password: ['', Validators.required],
-      id_rol: [1, Validators.required], // Valor por defecto para el rol
-      state: [true] // Valor por defecto para el estado
+      id_rol: [1, Validators.required], 
+      state: [true]
     });
   }
 }
