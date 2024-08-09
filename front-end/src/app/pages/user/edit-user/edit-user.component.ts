@@ -1,79 +1,119 @@
-import { Component, OnInit, Renderer2, Inject } from '@angular/core';
+import { Component, OnInit, Renderer2, Inject, AfterViewInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { UserService } from '../user.service';
 import Swal from 'sweetalert2';
 
+declare var KTWizard: any;
+declare var KTUtil: any;
+
 @Component({
   selector: 'app-edit-user',
-  standalone: true,
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css'],
-  imports: [ReactiveFormsModule, CommonModule]
+  standalone: true,
+  imports: [ReactiveFormsModule]
 })
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, AfterViewInit {
   userForm: FormGroup;
-  userId: number;
   user: any;
+  userId: number;
+  private _wizardObj: any;
+  private _formEl: any;
 
   constructor(
-    private route: ActivatedRoute,
     private fb: FormBuilder,
-    private router: Router,
     private userService: UserService,
+    private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       user: ['', Validators.required],
-      id_rol: ['', Validators.required],
     });
 
     const navigation = this.router.getCurrentNavigation();
     this.user = navigation?.extras?.state?.['user'];
-    this.userId = this.user?.id || 0; // Inicializar userId en el constructor
+    this.userId = this.user?.id || 0;
   }
 
   ngOnInit(): void {
-    const script = this.renderer.createElement('script');
-    script.src = 'assets/js/pages/custom/wizard/wizardUsers.js';
-    script.type = 'text/javascript';
-    this.renderer.appendChild(this.document.body, script);
-
     if (this.user) {
       this.userForm.patchValue({
         name: this.user.name,
         lastname: this.user.lastname,
-        email: this.user.email,
         user: this.user.user,
-        id_rol: this.user.id_rol
       });
     }
   }
 
-  onSubmit(): void {
-    console.log('Formulario válido:', this.userForm.valid);
-    console.log('Datos enviados:', this.userForm.value); 
+  ngAfterViewInit(): void {
+    this.initWizard();
+  }
 
-    if (this.userForm.valid) {
-      this.userService.updateUser(this.userId, this.userForm.value).subscribe(
-        (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Usuario',
-            text: 'Usuario actualizado correctamente'
-          });
-          this.router.navigate(['/user']);
-        },
-        (error) => {
-          console.error('Error actualizando usuario:', error);
-        }
-      );
-    }
+  private initWizard() {
+    this._wizardObj = new KTWizard('kt_wizard', {
+      startStep: 1,
+      clickableSteps: false
+    });
+
+    this._formEl = KTUtil.getById('kt_form');
+
+    this._wizardObj.on('change', (wizard: any) => {
+      if (wizard.getStep() > wizard.getNewStep()) {
+        return; // Skip if stepped back
+      }
+      const step = wizard.getStep();
+      if (step === 1) {
+        // Validaciones o lógica específica para el paso 1
+      } else if (step === 2) {
+        // Validaciones o lógica específica para el paso 2
+      }
+    });
+
+    this._wizardObj.on('submit', (wizard: any) => {
+      console.log(this.userForm.value);
+      if (this.userForm.valid) {
+        this.userService.updateUser(this.userId, this.userForm.value).subscribe(
+          (response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Usuario',
+                text: 'Usuario modificado correctamente'
+              });
+              this.router.navigate(['/users']);
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ha ocurrido un error al modificar el usuario: ' + response.error
+              });
+            }
+          },
+          (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha ocurrido un error al modificar el usuario: ' + error.error
+            });
+          }
+        );
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor, revise los errores en su formulario'
+        });
+      }
+    });
+  }
+
+  onSubmit() {
+    this._wizardObj.goTo(3); // Navegar a la página de confirmación
+    this._wizardObj.submit();
   }
 }
