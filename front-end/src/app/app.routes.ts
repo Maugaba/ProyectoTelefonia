@@ -23,7 +23,7 @@ import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supp
 //Products Routes
 import { ProductComponent } from './pages/products/product.component';
 import { CreateProductComponent } from './pages/products/create-product/create-product.component';
-//import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supplier.component';
+import { EditProductComponent } from './pages/products/edit-product/edit-product.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -94,7 +94,7 @@ export const routes: Routes = [
       },
       {
         path: 'products/edit',
-        component: EditSupplierComponent,
+        component: EditProductComponent,
         canActivate: [authGuard],
       },
     ],
