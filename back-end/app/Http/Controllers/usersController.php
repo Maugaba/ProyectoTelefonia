@@ -13,7 +13,7 @@ class usersController extends Controller
     public function get_all()
     {
         $state = $_POST['state'];
-        $users = users::where('state', $state)->get();
+        $users = Users::where('state', $state)->get();
         $data = [];
 
         foreach ($users as $user) {
@@ -89,6 +89,35 @@ class usersController extends Controller
             return response()->json(['success' => 'Estado actualizado correctamente', 'status' => 200],200);
         }
         return response()->json(['message' => 'Error al actualizar el estado', 'status' => 401],401);
+    }
+
+    //PUT
+    public function update($id){
+        $user = Suppliers::findOrFail($id);
+        if($user){
+            try {
+                $user->name = $_POST['name'];
+                $user->lastname = $_POST['lastname'];
+                $user->user = $_POST['user'];
+                $user->working_days = $_POST['working_days'];
+                $user->rol = $_POST['rol'];
+                $user->save();
+                return response()->json(['success' => 'Proveedor actualizado correctamente', 'status' => 200],200);
+            } catch (QueryException $e) {
+                return response()->json([
+                    'message' => 'Error en la base de datos al actualizar el proveedor',
+                    'error' => $e->getMessage(),
+                    'status' => 500
+                ], 500);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Error inesperado al actualizar el proveedor',
+                    'error' => $e->getMessage(),
+                    'status' => 500
+                ], 500);
+            }
+        }
+        return response()->json(['message' => 'Error al actualizar el proveedor', 'status' => 401],401);
     }
     
 }
