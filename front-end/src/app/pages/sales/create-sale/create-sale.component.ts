@@ -39,7 +39,7 @@ export class CreateSaleComponent{
 
       // Validar el formulario en cada paso
       if (step === 1) {
-        const name = this.productsForm.value.name;
+        const customer_id = this.productsForm.value.customer_id;
         const description = this.productsForm.value.description;
         const hasNumber = /\d/.test(name);
         if (!name || hasNumber) {
@@ -110,23 +110,24 @@ export class CreateSaleComponent{
     });
   }
 
-  productsForm: FormGroup;
+  salesForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private productService: ProductService,
+    private saleService: SaleService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
-    this.productsForm = this.fb.group({
+    this.salesForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: ['', Validators.required],
       quantity: ['', Validators.required],
-      sku: ['', Validators.required],
+      items: this.fb.array([], Validators.required),
       type: ['', Validators.required],
       supplier_id: ['', Validators.required],
     });
   }
 }
+ 

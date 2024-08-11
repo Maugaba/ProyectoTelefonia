@@ -28,16 +28,7 @@ export class ViewSaleComponent implements OnInit {
   }
 
   ngOnInit(): void {  
-    if (this.product) {
-      this.productForm.patchValue({
-        name: this.product.name,
-        description: this.product.description,
-        price: this.product.price,
-        quantity: this.product.quantity,
-        sku: this.product.sku,
-        type: this.product.type,
-        supplier_id: this.product.supplier_id
-      });
+    if (this.sale) {
     }
   }
 
