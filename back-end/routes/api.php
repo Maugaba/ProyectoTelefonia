@@ -42,4 +42,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/change/{id}', 'App\Http\Controllers\customersController@change')->name('customers.change');
         Route::post('/update/{id}', 'App\Http\Controllers\customersController@update')->name('customers.update');
     });
+
+    Route::prefix('sales')->group(function () {
+        Route::post('/all', 'App\Http\Controllers\salesController@get_all')->name('sales.all');
+        Route::post('/register', 'App\Http\Controllers\salesController@register')->name('sales.register');
+        Route::get('/cancel/{id}', 'App\Http\Controllers\salesController@cancel_sale')->name('sales.cancel');
+    });
 });

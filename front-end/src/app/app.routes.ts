@@ -25,6 +25,10 @@ import { ProductComponent } from './pages/products/product.component';
 import { CreateProductComponent } from './pages/products/create-product/create-product.component';
 import { EditProductComponent } from './pages/products/edit-product/edit-product.component';
 
+//Sales Routes
+import { SaleComponent } from './pages/sales/sale.component';
+import { CreateSaleComponent } from './pages/sales/create-sale/create-sale.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -95,6 +99,16 @@ export const routes: Routes = [
       {
         path: 'products/edit',
         component: EditProductComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sales',
+        component: SaleComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sales/create',
+        component: CreateSaleComponent,
         canActivate: [authGuard],
       },
     ],
