@@ -123,28 +123,21 @@
                           <!--end::Form Group-->
                           <!--begin::Form Group-->
 													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Dias de la semana</label>
-														<select #daySelect class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
-														  <option value="Lunes">Lunes</option>
-														  <option value="Martes">Martes</option>
-														  <option value="Miércoles">Miércoles</option>
-														  <option value="Jueves">Jueves</option>
-														  <option value="Viernes">Viernes</option>
-														  <option value="Sábado">Sábado</option>
-														  <option value="Domingo">Domingo</option>
-														</select>
-														<br>
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel" for="hours">Horas:</label>
-														<input  class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" #hoursInput type="number" min="1" max="8">
-													  
-														<button class="btn btn-light-primary font-weight-bolder font-size-h6 pl-6 pr-8 py-4 my-3 mr-3" type="button" (click)="addWorkingDay(daySelect.value, +hoursInput.value)">Agregar día</button>
-													</div>
-													  
-                          <div *ngFor="let day of workingDaysArray.controls; let i = index">
+                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Días de la semana</label>
+                            <select #daySelect class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
+                                <option *ngFor="let day of availableDays" [value]="day">{{ day }}</option>
+                            </select>
+                            <br>
+                            <label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel" for="hours">Horas:</label>
+                            <input class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" #hoursInput type="number" min="1" max="8">
+                            <button class="btn btn-light-primary font-weight-bolder font-size-h6 pl-6 pr-8 py-4 my-3 mr-3" type="button" (click)="addWorkingDay(daySelect.value, +hoursInput.value)">Agregar día</button>
+                        </div>
+                        
+                        <div *ngFor="let day of workingDaysArray.controls; let i = index">
                             <p class="font-size-h6 font-weight-bolder text-dark">{{ day.value.day }}: {{ day.value.hours }} horas 
-                              <button class="btn btn-light-danger font-weight-bolder font-size-h6 pl-6 pr-8 py-4 my-3 mr-3" type="button" (click)="removeWorkingDay(i)">Eliminar</button>
+                                <button class="btn btn-light-danger font-weight-bolder font-size-h6 pl-6 pr-8 py-4 my-3 mr-3" type="button" (click)="removeWorkingDay(i)">Eliminar</button>
                             </p>
-                          </div>
+                        </div>
 													<!--end::Form Group-->
                         </div>
                         <!--end: Wizard Step 1-->

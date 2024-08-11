@@ -21,6 +21,8 @@ export class EditUserComponent implements OnInit, AfterViewInit {
   userId: number;
   private _wizardObj: any;
   private _formEl: any;
+  availableDays: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  allDays: string[] = [...this.availableDays]; // Define allDays with the same initial values
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +50,7 @@ export class EditUserComponent implements OnInit, AfterViewInit {
         lastname: this.user.lastname,
         user: this.user.user,
       });
-      if(this.user.working_days){
+      if (this.user.working_days) {
         // Decodificar el campo working_days
         const workingDaysString = this.user.working_days; // Por ejemplo: "Viernes_5, Martes_5"
         const workingDaysArray = workingDaysString.split(', ').map((dayHours: any) => {
@@ -136,8 +138,29 @@ export class EditUserComponent implements OnInit, AfterViewInit {
   get workingDaysArray() {
     return this.userForm.get('working_days') as FormArray;
   }
-  
+
   addWorkingDay(day: string, hours: number) {
+    // Verificar si el día ya ha sido agregado
+    const existingDayControl = this.workingDaysArray.controls.find(control => control.value.day === day);
+  
+    if (existingDayControl) {
+      // Verificar si las horas a agregar superan el límite de 8 horas para el día
+      const currentHours = existingDayControl.value.hours;
+      if (currentHours + hours > 8) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pueden asignar más de 8 horas por día'
+        });
+        return;
+      }
+  
+      // Actualizar las horas del día existente
+      existingDayControl.get('hours')?.setValue(currentHours + hours);
+      return;
+    }
+  
+    // Verificar el límite de horas totales
     const totalHours = this.getTotalHours() + hours;
     if (totalHours > 40) {
       Swal.fire({
@@ -147,17 +170,41 @@ export class EditUserComponent implements OnInit, AfterViewInit {
       });
       return;
     }
-    
+  
+    if (hours > 8) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pueden asignar más de 8 horas por día'
+      });
+      return;
+    }
+  
+    // Agregar el nuevo día
     this.workingDaysArray.push(this.fb.group({
       day: [day, Validators.required],
       hours: [hours, [Validators.required, Validators.min(1)]]
     }));
+  
+    // Actualizar la lista de días disponibles
+    this.updateAvailableDays();
   }
   
   removeWorkingDay(index: number) {
+    const dayToRemove = this.workingDaysArray.at(index).value.day;
     this.workingDaysArray.removeAt(index);
+
+    // Volver a añadir el día a la lista disponible
+    if (!this.availableDays.includes(dayToRemove)) {
+      this.availableDays.push(dayToRemove);
+    }
   }
-  
+
+  updateAvailableDays() {
+    const selectedDays = this.workingDaysArray.controls.map(control => control.value.day);
+    this.availableDays = this.allDays.filter(day => !selectedDays.includes(day));
+  }
+
   getTotalHours() {
     return this.workingDaysArray.controls
       .map(control => control.value.hours)

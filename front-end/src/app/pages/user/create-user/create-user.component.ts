@@ -27,6 +27,9 @@ export class CreateUserComponent implements OnInit {
       id_rol: 1, // Establecer el rol por defecto en 1
       state: true // Establecer el estado por defecto en activo
     });
+
+    this.updateAvailableDays();
+
   }
 
   ngAfterViewInit(): void {
@@ -159,6 +162,27 @@ export class CreateUserComponent implements OnInit {
   }
   
   addWorkingDay(day: string, hours: number) {
+    // Verificar si el día ya ha sido agregado
+    const dayExists = this.workingDaysArray.controls.some(control => control.value.day === day);
+
+    if (dayExists) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El día ya ha sido agregado. Elimínalo primero si deseas cambiar las horas.'
+      });
+      return;
+    }
+
+    if (hours > 8) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pueden asignar más de 8 horas por día'
+      });
+      return;
+    }
+
     const totalHours = this.getTotalHours() + hours;
     if (totalHours > 40) {
       Swal.fire({
@@ -168,17 +192,29 @@ export class CreateUserComponent implements OnInit {
       });
       return;
     }
-    
+
     this.workingDaysArray.push(this.fb.group({
       day: [day, Validators.required],
       hours: [hours, [Validators.required, Validators.min(1)]]
     }));
+
+    // Actualizar la lista de días disponibles
+    this.updateAvailableDays();
   }
-  
+
   removeWorkingDay(index: number) {
-    this.workingDaysArray.removeAt(index);
+      this.workingDaysArray.removeAt(index);
+      this.updateAvailableDays();
+    }
+
+  updateAvailableDays() {
+      const selectedDays = this.workingDaysArray.controls.map(control => control.value.day);
+      this.availableDays = this.allDays.filter(day => !selectedDays.includes(day));
   }
-  
+
+  availableDays: string[] = [];
+  allDays: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
   getTotalHours() {
     return this.workingDaysArray.controls
       .map(control => control.value.hours)
