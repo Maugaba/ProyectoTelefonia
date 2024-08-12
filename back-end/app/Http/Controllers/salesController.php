@@ -9,6 +9,7 @@ use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 class salesController extends Controller
 {
     public function get_all()
@@ -50,27 +51,37 @@ class salesController extends Controller
         return response()->json($response);
     }
 
-    public function register()
+    public function register(Request $request)
     {
         try {
             DB::beginTransaction();
             $sale = new Sales();
-            $sale->customer_id = $_POST['customer_id'];
-            $sale->total_amount = $_POST['total_amount'];
-            $sale->sale_date = $_POST['sale_date'];
-            $sale->notes = $_POST['notes'];
+            $sale->customer_id = $request->customer_id;
+            $sale->total_amount = $request->total_amount;
+            $sale->sale_date = $request->sale_date;
+            $sale->notes = $request->notes;
             $sale->state = 'Vendido';
             $sale->save();
             $sale_id = $sale->id;
-            $items = $_POST['items'];
+            $items = $request->items;
             foreach ($items as $item) {
                 $sale_item = new Sale_items();
                 $sale_item->sale_id = $sale_id;
                 $sale_item->product_id = $item['product_id'];
                 $sale_item->quantity = $item['quantity'];
-                $sale_item->price = $item['price'];
-                $sale_item->total = $item['total'];
+                $sale_item->price = $item['unit_price'];
+                $sale_item->total = $item['total_price'];
                 $sale_item->save();
+                $product = Products::findOrFail($item['product_id']);
+                if ($product->quantity < $item['quantity']) {
+                    DB::rollBack();
+                    return response()->json([
+                        'error' => 'Error al registrar la venta, no hay suficiente stock',
+                        'status' => 401
+                    ], 401);
+                }
+                $product->quantity = $product->quantity - $item['quantity'];
+                $product->save();
             }
             DB::commit();
             return response()->json([
