@@ -53,6 +53,12 @@
                 <i class="menu-arrow"></i>
               </a>
             </li>
+            <li class="menu-item menu-item-open menu-item-submenu menu-item-rel menu-item-open" [ngClass]="{'menu-item-hover': isRouteActive('/product_batches')}" aria-haspopup="true">
+              <a href="javascript:;" class="menu-link menu-toggle" [routerLink]="['/product_batches']">
+                <span class="menu-text">Lotes de Productos</span>
+                <i class="menu-arrow"></i>
+              </a>
+            </li>
           </ul>
           <!--end::Header Nav-->
         </div>
