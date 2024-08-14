@@ -85,12 +85,8 @@ export class SaleComponent implements OnInit {
     );
   }
 
-  viewSale(sale: any): void {
-    const navigationExtras: NavigationExtras = {
-      state: {
-        sale,
-      },
-    };
-    this.router.navigate(['sales/view'], navigationExtras);
+  viewSale(saleId: number): void {
+    console.log('Navigating to sale:', saleId);
+    this.router.navigate(['sales/view', saleId]);
   }
 }

@@ -29,6 +29,9 @@ import { EditProductComponent } from './pages/products/edit-product/edit-product
 import { SaleComponent } from './pages/sales/sale.component';
 import { CreateSaleComponent } from './pages/sales/create-sale/create-sale.component';
 
+//Sales Routes view
+import { ViewSaleComponent } from './pages/sales/view-sale/view-sale.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -109,6 +112,16 @@ export const routes: Routes = [
       {
         path: 'sales/create',
         component: CreateSaleComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sales/view',
+        component: ViewSaleComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sales/view/:id',
+        component: ViewSaleComponent,
         canActivate: [authGuard],
       },
     ],

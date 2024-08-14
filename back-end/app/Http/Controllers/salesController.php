@@ -12,6 +12,44 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 class salesController extends Controller
 {
+   
+    public function show($id)
+    {
+        // Buscar la venta por ID
+        $sale = Sales::find($id);
+
+        // Verificar si la venta existe
+        if (!$sale) {
+            return response()->json(['message' => 'Venta no encontrada'], 404);
+        }
+
+        // Obtener detalles del cliente
+        $customer = Customers::findOrFail($sale->customer_id);
+
+        // Obtener los ítems de la venta
+        $items = Sale_items::where('sale_id', $sale->id)->get();
+
+        // Formatear la fecha de la venta
+        $date_in_spanish = Carbon::parse($sale->sale_date)->locale('es_ES')->isoFormat('dddd D [de] MMMM [de] YYYY');
+
+        // Crear la respuesta con los detalles de la venta
+        $saleDetails = [
+            'id' => $sale->id,
+            'customer' => $customer->name,
+            'total_amount' => $sale->total_amount,
+            'sale_date' => $date_in_spanish,
+            'notes' => $sale->notes,
+            'state' => $sale->state,
+            'items_count' => count($items),
+            'items_detail' => $items,
+            'created_at' => $sale->created_at,
+            'updated_at' => $sale->updated_at
+        ];
+
+        return response()->json($saleDetails, 200);
+    }
+
+   
     public function get_all()
     {
         $state = $_POST['state'];
@@ -143,6 +181,6 @@ class salesController extends Controller
         return response()->json([
             'message' => 'Error al cancelar la venta, no existe',
             'status' => 401
-        ], 401);
+        ],401);
     }
 }
