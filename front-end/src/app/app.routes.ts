@@ -4,33 +4,36 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './service/auth.guard';
 
-//User Routes
+// User Routes
 import { UserComponent } from './pages/user/user.component';
 import { CreateUserComponent } from './pages/user/create-user/create-user.component';
 import { EditUserComponent } from './pages/user/edit-user/edit-user.component';
 
-//Customers Routes
+// Customers Routes
 import { CustomersComponent } from './pages/customers/customers.component';
 import { CreateCustomersComponent } from './pages/customers/create-customers/create-customers.component';
 import { EditCustomersComponent } from './pages/customers/edit-customers/edit-customers.component';
 
-
-//Suppliers Routes
+// Suppliers Routes
 import { SupplierComponent } from './pages/suppliers/supplier.component';
 import { CreateSupplierComponent } from './pages/suppliers/create-supplier/create-supplier.component';
 import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supplier.component';
 
-//Products Routes
+// Products Routes
 import { ProductComponent } from './pages/products/product.component';
 import { CreateProductComponent } from './pages/products/create-product/create-product.component';
 import { EditProductComponent } from './pages/products/edit-product/edit-product.component';
 
-//Sales Routes
+// Sales Routes
 import { SaleComponent } from './pages/sales/sale.component';
 import { CreateSaleComponent } from './pages/sales/create-sale/create-sale.component';
 
-//Sales Routes view
 import { ViewSaleComponent } from './pages/sales/view-sale/view-sale.component';
+
+
+// Product Batches Routes
+import { ProductBatchesComponent } from './pages/product_batches/product_batches.component';
+import { CreateProductBatchesComponent } from './pages/product_batches/create-product_batches/create-product_batches.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -115,13 +118,23 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'sales/view',
-        component: ViewSaleComponent,
+        path: 'sales/create',
+        component: CreateSaleComponent,
         canActivate: [authGuard],
       },
       {
         path: 'sales/view/:id',
         component: ViewSaleComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'product_batches',
+        component: ProductBatchesComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'product_batches/create',
+        component: CreateProductBatchesComponent,
         canActivate: [authGuard],
       },
     ],

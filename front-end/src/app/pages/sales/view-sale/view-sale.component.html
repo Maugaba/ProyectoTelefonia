@@ -49,8 +49,8 @@
 														</a>
 														<!--end::Logo-->
 														<span class="d-flex flex-column align-items-md-end opacity-70">
-															<span>Cecilia Chapman, 711-2880 Nulla St, Mankato</span>
-															<span>Mississippi 96522</span>
+															<span>ABARROTERÍA LA BENDICÍON</span>
+															<span>Quetzaltenango 12-12</span>
 														</span>
 													</div>
 												</div>
@@ -129,7 +129,7 @@
 														</thead>
 														<tbody>
 															<tr class="font-weight-bolder">
-																<td>{{ saleDetails?.payment_date }}</td>
+																<td>{{ saleDetails?.sale_date || 'Fecha no disponible' }}</td>
 																<td class="text-primary font-size-h3 font-weight-boldest text-right">{{ saleDetails?.total_amount | currency:'Q' :'symbol':'1.2-2' }}</td>
 															</tr>
 														</tbody>

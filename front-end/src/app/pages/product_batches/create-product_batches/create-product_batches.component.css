@@ -1,0 +1,32 @@
+.card-custom {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: #3699ff;
+    border-color: #3699ff;
+}
+
+.btn-primary:hover {
+    background-color: #2575ce;
+    border-color: #2575ce;
+}
+
+/* Añadido para ajustar el diseño de los campos relacionados con los lotes de productos */
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group-prepend .input-group-text {
+    background-color: #f1f3f5;
+    border: 1px solid #ced4da;
+}
