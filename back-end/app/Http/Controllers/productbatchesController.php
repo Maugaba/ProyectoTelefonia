@@ -108,5 +108,35 @@ class productbatchesController extends Controller
         }
         return response()->json(['message' => 'Error al actualizar el producto', 'status' => 401],401);
     }
+
+    // Funcion para filtrar los lotes por fecha de expiracion
+    public function filter_by_date(Request $request)
+{
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+    $state = $request->input('state', 'Activo');
+
+    $productbatches = Productbatches::where('state', $state)
+        ->whereBetween('expiration_date', [$startDate, $endDate])
+        ->get();
+
+    $data = [];
+    foreach ($productbatches as $productbatche) {
+        $model = [
+            "id" => $productbatche->id,
+            "product_id" => $productbatche->product_id,
+            "batch_number" => $productbatche->batch_number,
+            "expiration_date" => $productbatche->expiration_date,
+            "quantity" => $productbatche->quantity,
+            "state" => $productbatche->state,
+            "created_at" => $productbatche->created_at,
+            "updated_at" => $productbatche->updated_at
+        ];
+        array_push($data, $model);
+    }
+
+    return response()->json(['data' => $data]);
+}
+
     
 }

@@ -11,6 +11,7 @@ export class ProductbacheService {
   private createUrl = `${API_URL}/api/productbatches/register`;
   private changeUrl = `${API_URL}/api/productbatches/change`;
   private updateUrl = `${API_URL}/api/productbatches/update/`;
+  private filterUrl = `${API_URL}/api/productbatches/filter`;
 
   constructor(private http: HttpClient) {}
 
@@ -75,4 +76,19 @@ export class ProductbacheService {
     return this.http.get<any>(`${this.changeUrl}/${id}`, { headers }).pipe(
     );
   }
+
+  // Funcion para filtrar lotes por fecha de expiracion
+  filterProductbatch(startDate: string, endDate: string, state: string): Observable<any> {
+    const token = localStorage.getItem('angular17token');
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Accept', 'application/json');
+
+    return this.http.post<any>(`${this.filterUrl}`, {
+      start_date: startDate,
+      end_date: endDate,
+      state: state
+    });
+  }
+  
 }

@@ -89,4 +89,30 @@ export class ProductbatcheComponent implements OnInit {
       }
     );
   }
+
+  //Filtro de Lotes
+  dateRange: { start: Date | null, end: Date | null } = { start: null, end: null };
+
+filterByDate(): void {
+  if (this.dateRange.start && this.dateRange.end) {
+    const formattedStartDate = this.formatDate(this.dateRange.start);
+    const formattedEndDate = this.formatDate(this.dateRange.end);
+
+    this.productbatchService.filterProductbatch(formattedStartDate, formattedEndDate, this.selectedStatus).subscribe(
+      (data) => {
+        this.productbatches = data.data;
+        this.filteredProductbatches = this.productbatches;
+      },
+      (error) => {
+        console.error('Error fetching product batches:', error);
+      }
+    );
+  }
+}
+
+formatDate(date: Date): string {
+  return date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+}
+
+  
 }
