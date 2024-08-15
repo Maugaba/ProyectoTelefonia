@@ -49,10 +49,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/cancel/{id}', 'App\Http\Controllers\salesController@cancel_sale')->name('sales.cancel');
     });
 
-    Route::prefix('product_batches')->group(function () {
-        Route::post('/all', 'App\Http\Controllers\product_batchesController@get_all')->name('product_batches.all');
-        Route::post('/register', 'App\Http\Controllers\product_batchesController@register')->name('product_batches.register');
-        Route::get('/cancel/{id}', 'App\Http\Controllers\product_batchesController@cancel_batch')->name('product_batches.cancel');
+    Route::prefix('productbatches')->group(function () {
+        Route::post('/all', 'App\Http\Controllers\productbatchesController@get_all')->name('productbatches.all');
+        Route::post('/register', 'App\Http\Controllers\productbatchesController@register')->name('productbatches.register');
+        Route::get('/change/{id}', 'App\Http\Controllers\productbatchesController@change')->name('productbatches.change');
+        Route::post('/update/{id}', 'App\Http\Controllers\productbatchesController@update')->name('productbatches.update');
     });
     
 });

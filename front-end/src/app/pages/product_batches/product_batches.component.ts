@@ -1,93 +1,92 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductBatchesService } from './product_batches.service';
+import { ProductbacheService } from './product_batches.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, NavigationExtras, RouterModule } from '@angular/router';
+import { Router, NavigationExtras, RouterModule} from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-product-batches',
+  selector: 'app-product',
   templateUrl: './product_batches.component.html',
   styleUrls: ['./product_batches.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule]
 })
-export class ProductBatchesComponent implements OnInit {
-  productBatches: any[] = [];
-  filteredBatches: any[] = [];
+export class ProductbatcheComponent implements OnInit {
+  productbatches: any[] = [];
+  filteredProductbatches: any[] = [];
   searchText: string = '';
-  selectedStatus: string = 'Vendido'; 
+  selectedStatus: string = 'Activo'; 
 
-  constructor(private productBatchesService: ProductBatchesService, private router: Router) {}
+  constructor(private productbatchService: ProductbacheService, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchProductBatches();
+    this.fetchProductbatches();
   }
 
-  fetchProductBatches(): void {
+  fetchProductbatches(): void {
     const estado = this.selectedStatus === 'todos' ? '' : this.selectedStatus;
-    this.productBatchesService.getProductBatches(estado).subscribe(
+    this.productbatchService.getProductbatch(estado).subscribe(
       (data) => {
-        this.productBatches = data.data;
-        this.filteredBatches = this.productBatches;
-        this.filterProductBatches();
+        this.productbatches = data.data;
+        this.filteredProductbatches = this.productbatches;
+        this.filterProductbatches();
       },
       (error) => {
-        console.error('Error fetching product batches:', error);
+        console.error('Error fetching products:', error);
       }
     );
   }
 
-  filterProductBatches(): void {
-    this.filteredBatches = this.productBatches.filter(batch => {
-      const product = batch.product.toLowerCase();
-      const quantity = batch.quantity;
-      const batch_date = batch.batch_date;
-      const state = batch.state;
-      const notes = batch.notes;
-
+  filterProductbatches(): void {
+    this.filteredProductbatches = this.productbatches.filter(productbatch => {
+      const product_id = productbatch.product_id ? productbatch.product_id.toLowerCase() : '';
+      const batch_number = productbatch.batch_number ? productbatch.batch_number.toLowerCase() : '';
+      const expiration_date = productbatch.expiration_date ? productbatch.expiration_date.toLowerCase() : '';
+      const quantity = productbatch.quantity ? productbatch.quantity.toLowerCase() : '';
+      
       const searchText = this.searchText.toLowerCase();
       
-      return product.includes(searchText) || 
-        quantity.includes(searchText) || 
-        batch_date.includes(searchText) || 
-        state.includes(searchText) || 
-        notes.includes(searchText);
+      return product_id.includes(searchText) ||
+        batch_number.includes(searchText) ||
+        expiration_date.includes(searchText) ||
+        quantity.includes(searchText);
     });
   }
   
+
   onSearchTextChange(): void {
-    this.filterProductBatches();
+    this.filterProductbatches();
   }
 
   onStatusChange(): void {
-    this.fetchProductBatches();
+    this.fetchProductbatches();
   }
 
-  deleteBatch(id: number): void { // Renombrado a deleteBatch
-    this.productBatchesService.cancelBatch(id).subscribe(
+  editProductbatch(productbatch: any): void {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        productbatch
+      }
+    };
+    this.router.navigate(['/productbatches/edit'], navigationExtras);
+  }
+
+  changeState(id: number): void {
+    this.productbatchService.changeState(id).subscribe(
       (response) => {
         Swal.fire({
           icon: 'success',
           title: 'Estado',
-          text: 'Lote eliminado correctamente'})
-        this.fetchProductBatches();
+          text: 'Estado actualizado correctamente'})
+        this.fetchProductbatches();
       },
       (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Error al eliminar el lote' + error})   
+          text: 'Error al actualizar el estado'+ error})   
       }
     );
-  }
-
-  viewBatch(batch: any): void {
-    const navigationExtras: NavigationExtras = {
-      state: {
-        batch,
-      },
-    };
-    this.router.navigate(['product_batches/view'], navigationExtras);
   }
 }

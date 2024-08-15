@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductBatchesComponent } from './product_batches.component';
+import { ProductbatcheComponent } from './product_batches.component';
 
-describe('ProductBatchesComponent', () => {
-  let component: ProductBatchesComponent;
-  let fixture: ComponentFixture<ProductBatchesComponent>;
+describe('ProductbatcheComponent', () => {
+  let component: ProductbatcheComponent;
+  let fixture: ComponentFixture<ProductbatcheComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProductBatchesComponent]
+      imports: [ProductbatcheComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ProductBatchesComponent);
+    fixture = TestBed.createComponent(ProductbatcheComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -21,3 +21,4 @@ describe('ProductBatchesComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
