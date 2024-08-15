@@ -4,13 +4,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationExtras, RouterModule} from '@angular/router';
 import Swal from 'sweetalert2';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-product',
   templateUrl: './product_batches.component.html',
   styleUrls: ['./product_batches.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule, MatDatepickerModule, MatFormFieldModule, MatInputModule]
 })
 export class ProductbatcheComponent implements OnInit {
   productbatches: any[] = [];

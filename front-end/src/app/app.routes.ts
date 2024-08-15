@@ -132,11 +132,11 @@ export const routes: Routes = [
         component: ProductbatcheComponent,
         canActivate: [authGuard],
       },
-      {
-        path: 'product_batches/create',
+      //{
+      //  path: 'product_batches/create',
         //component: CreateProductBatchesComponent,
-        canActivate: [authGuard],
-      },
+      //  canActivate: [authGuard],
+      //},
       {
         path: 'product_batches/edit',
         component: EditProductComponent,
