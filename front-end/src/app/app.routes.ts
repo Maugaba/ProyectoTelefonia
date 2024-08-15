@@ -28,6 +28,9 @@ import { EditProductComponent } from './pages/products/edit-product/edit-product
 import { SaleComponent } from './pages/sales/sale.component';
 import { CreateSaleComponent } from './pages/sales/create-sale/create-sale.component';
 
+import { ViewSaleComponent } from './pages/sales/view-sale/view-sale.component';
+
+
 // Product Batches Routes
 import { ProductbatcheComponent } from './pages/product_batches/product_batches.component';
 //import { CreateProductBatchesComponent } from './pages/product_batches/create-product_batches/create-product_batches.component';
@@ -112,6 +115,16 @@ export const routes: Routes = [
       {
         path: 'sales/create',
         component: CreateSaleComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sales/create',
+        component: CreateSaleComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sales/view/:id',
+        component: ViewSaleComponent,
         canActivate: [authGuard],
       },
       {

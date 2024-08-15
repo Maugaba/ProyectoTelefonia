@@ -80,4 +80,18 @@ export class SaleService {
 
     );
   }
+  getSaleById(saleId: number): Observable<any> {
+    const token = localStorage.getItem('angular17token');
+    if (!token) {
+      throw new Error('Token not found');
+    }
+
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Accept', 'application/json');
+
+    const url = `${API_URL}/api/sales/${saleId}`;
+    console.log('API URL:', url);
+    return this.http.get<any>(url, { headers });
+}
 }

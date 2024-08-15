@@ -47,6 +47,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/all', 'App\Http\Controllers\salesController@get_all')->name('sales.all');
         Route::post('/register', 'App\Http\Controllers\salesController@register')->name('sales.register');
         Route::get('/cancel/{id}', 'App\Http\Controllers\salesController@cancel_sale')->name('sales.cancel');
+        Route::get('/{id}', 'App\Http\Controllers\SalesController@show')->name('sales.show'); // Cambiado aquí
     });
 
     Route::prefix('productbatches')->group(function () {

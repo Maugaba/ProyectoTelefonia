@@ -13,4 +13,4 @@ class Sales extends Model
         'notes',
         'state',
     ];
-}
+ }
