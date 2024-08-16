@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from './product.service';
+import { SupplierService } from '../suppliers/supplier.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, NavigationExtras, RouterModule} from '@angular/router';
+import { Router, NavigationExtras, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,13 +16,19 @@ import Swal from 'sweetalert2';
 export class ProductComponent implements OnInit {
   products: any[] = [];
   filteredProducts: any[] = [];
+  suppliers: any[] = [];
   searchText: string = '';
   selectedStatus: string = 'Activo'; 
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(
+    private productService: ProductService,
+    private supplierService: SupplierService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.fetchSuppliers();
   }
 
   fetchProducts(): void {
@@ -38,15 +45,31 @@ export class ProductComponent implements OnInit {
     );
   }
 
+  fetchSuppliers(): void {
+    this.supplierService.getSupplier(this.selectedStatus).subscribe(
+      (data) => {
+        this.suppliers = data.data; // Asignar correctamente la lista de proveedores
+      },
+      (error) => {
+        console.error('Error fetching suppliers:', error);
+      }
+    );
+  }
+
+  getSupplierName(supplierId: number): string {
+    const supplier = this.suppliers.find(s => s.id === supplierId);
+    return supplier ? supplier.name : ''; // Devolver cadena vacía si no se encuentra
+  }
+
   filterProducts(): void {
     this.filteredProducts = this.products.filter(product => {
       const name = product.name ? product.name.toLowerCase() : '';
       const description = product.description ? product.description.toLowerCase() : '';
-      const price = product.price ? product.price.toLowerCase() : '';
-      const quantity = product.quantity ? product.quantity.toLowerCase() : '';
+      const price = product.price ? product.price.toString().toLowerCase() : '';
+      const quantity = product.quantity ? product.quantity.toString().toLowerCase() : '';
       const sku = product.sku ? product.sku.toLowerCase() : '';
       const type = product.type ? product.type.toLowerCase() : '';
-      const supplier_id = product.supplier_id;
+      const supplierName = this.getSupplierName(product.supplier_id).toLowerCase();
       
       const searchText = this.searchText.toLowerCase();
       
@@ -56,10 +79,9 @@ export class ProductComponent implements OnInit {
         quantity.includes(searchText) ||
         sku.includes(searchText) ||
         type.includes(searchText) ||
-        supplier_id.includes(searchText);
+        supplierName.includes(searchText);
     });
   }
-  
 
   onSearchTextChange(): void {
     this.filterProducts();
@@ -71,9 +93,7 @@ export class ProductComponent implements OnInit {
 
   editProduct(product: any): void {
     const navigationExtras: NavigationExtras = {
-      state: {
-        product
-      }
+      state: { product }
     };
     this.router.navigate(['/products/edit'], navigationExtras);
   }
@@ -84,14 +104,16 @@ export class ProductComponent implements OnInit {
         Swal.fire({
           icon: 'success',
           title: 'Estado',
-          text: 'Estado actualizado correctamente'})
+          text: 'Estado actualizado correctamente'
+        });
         this.fetchProducts();
       },
       (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Error al actualizar el estado'+ error})   
+          text: 'Error al actualizar el estado: ' + error
+        });   
       }
     );
   }

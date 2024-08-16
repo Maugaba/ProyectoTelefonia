@@ -67,7 +67,7 @@
             <tbody>
               <tr *ngFor="let batch of filteredBatches">
                 <td>{{ batch.id }}</td>
-                <td>{{ batch.product_id }}</td> <!-- Suponiendo que este campo muestra el nombre o ID del producto -->
+                <td>{{ getProductName(batch.product_id) }}</td> <!-- Suponiendo que este campo muestra el nombre o ID del producto -->
                 <td>{{ batch.batch_number }}</td>
                 <td>{{ batch.expiration_date | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ batch.quantity }}</td>

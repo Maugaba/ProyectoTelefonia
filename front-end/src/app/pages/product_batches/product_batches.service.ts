@@ -11,7 +11,13 @@ export class ProductBatchesService {
   private createUrl = `${API_URL}/api/productbatches/register`; // Actualizado
   private toggleStateUrl = `${API_URL}/api/productbatches/change`; // Actualizado
 
+  private apiUrl = `${API_URL}/api/products/all`;
+
   constructor(private http: HttpClient) {}
+
+  getProducts(state: string): Observable<any> {
+    return this.http.post(this.apiUrl, { state });
+  }
 
   getProductBatches(state: string): Observable<any> {
     const token = localStorage.getItem('angular17token');

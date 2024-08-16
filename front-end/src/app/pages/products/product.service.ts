@@ -12,8 +12,14 @@ export class ProductService {
   private changeUrl = `${API_URL}/api/products/change`;
   private updateUrl = `${API_URL}/api/products/update/`;
 
+  private apiUrl = `${API_URL}/api/suppliers/all`;
+
   constructor(private http: HttpClient) {}
 
+  getSupplier(state: string): Observable<any> {
+    return this.http.post(this.apiUrl, { state });
+  }
+  
   getProduct(state: string): Observable<any> {
     const token = localStorage.getItem('angular17token');
     const headers = new HttpHeaders()

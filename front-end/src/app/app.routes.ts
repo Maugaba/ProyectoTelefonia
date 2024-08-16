@@ -27,9 +27,7 @@ import { EditProductComponent } from './pages/products/edit-product/edit-product
 // Sales Routes
 import { SaleComponent } from './pages/sales/sale.component';
 import { CreateSaleComponent } from './pages/sales/create-sale/create-sale.component';
-
 import { ViewSaleComponent } from './pages/sales/view-sale/view-sale.component';
-
 
 // Product Batches Routes
 import { ProductBatchesComponent } from './pages/product_batches/product_batches.component';

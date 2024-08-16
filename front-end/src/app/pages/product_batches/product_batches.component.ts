@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductBatchesService } from './product_batches.service';
+import { ProductService } from '../products/product.service'; // Usa ProductService aquí
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationExtras, RouterModule } from '@angular/router';
@@ -15,13 +16,19 @@ import Swal from 'sweetalert2';
 export class ProductBatchesComponent implements OnInit {
   productBatches: any[] = [];
   filteredBatches: any[] = [];
+  products: any[] = [];
   searchText: string = '';
   selectedStatus: string = 'Activo'; // Actualizado
 
-  constructor(private productBatchesService: ProductBatchesService, private router: Router) {}
+  constructor(
+    private productBatchesService: ProductBatchesService, 
+    private productService: ProductService, // Cambiado a ProductService
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchProductBatches();
+    this.fetchProducts();
   }
 
   fetchProductBatches(): void {
@@ -38,7 +45,22 @@ export class ProductBatchesComponent implements OnInit {
       }
     );
   }
-  
+
+  fetchProducts(): void {
+    this.productService.getProduct(this.selectedStatus).subscribe( // Cambiado a productService
+      (data) => {
+        this.products = data.data;
+      },
+      (error) => {
+        console.error('Error fetching products:', error);
+      }
+    );
+  }
+
+  getProductName(productId: number): string {
+    const product = this.products.find(p => p.id === productId);
+    return product ? product.name : 'Unknown';
+  }
 
   filterProductBatches(): void {
     this.filteredBatches = this.productBatches.filter(batch => {
@@ -50,7 +72,7 @@ export class ProductBatchesComponent implements OnInit {
 
       const searchText = this.searchText.toLowerCase();
       
-      return productId.toString().includes(searchText) || 
+      return this.getProductName(productId).toLowerCase().includes(searchText) || 
         batchNumber.toLowerCase().includes(searchText) || 
         expirationDate.toLowerCase().includes(searchText) || 
         quantity.toString().includes(searchText) || 

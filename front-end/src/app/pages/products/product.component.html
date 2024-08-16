@@ -75,7 +75,7 @@
                 <td>{{ product.quantity }}</td>              
                 <td>{{ product.sku }}</td>
                 <td>{{ product.type }}</td>
-                <td>{{ product.supplier_id }}</td>
+                <td>{{ getSupplierName(product.supplier_id) }}</td>
                 <td>
                   <button (click)="editProduct(product)" class="btn btn-link btn-sm p-0">
                     <i class="far fa-edit"></i>
