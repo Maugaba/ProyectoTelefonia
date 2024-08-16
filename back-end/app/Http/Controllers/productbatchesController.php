@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Productbatches;
+use App\Models\Products;
 use Illuminate\Database\QueryException;
 class productbatchesController extends Controller
 {
@@ -45,12 +46,15 @@ class productbatchesController extends Controller
     {
         try {
             $productbatche = new Productbatches();
-            $productbatche->product_id = $_POST['product_id'];
-            $productbatche->batch_number = $_POST['batch_number'];
-            $productbatche->expiration_date = $_POST['expiration_date'];
-            $productbatche->quantity = $_POST['quantity'];
+            $productbatche->product_id = $request->input('product_id');
+            $productbatche->batch_number = $request->input('batch_number');
+            $productbatche->expiration_date = $request->input('expiration_date');
+            $productbatche->quantity = $request->input('quantity');
             $productbatche->state = 'Activo';
             $productbatche->save();
+            $product = Products::find($productbatche->product_id);
+            $product->quantity = $product->quantity + $request->input('quantity');
+            $product->save();
     
             return response()->json([
                 'success' => 'Lote creado correctamente',
@@ -77,6 +81,15 @@ class productbatchesController extends Controller
         if($productbatche){
             $productbatche->state = $productbatche->state == 'Activo' ? 'Inactivo' : 'Activo';
             $productbatche->save();
+            if($productbatche->state == 'Inactivo'){
+                $product = Products::find($productbatche->product_id);
+                $product->quantity = $product->quantity - $productbatche->quantity;
+                $product->save();
+            }else{
+                $product = Products::find($productbatche->product_id);
+                $product->quantity = $product->quantity + $productbatche->quantity;
+                $product->save();
+            }
             return response()->json(['success' => 'Estado actualizado correctamente', 'status' => 200],200);
         }
         return response()->json(['message' => 'Error al actualizar el estado', 'status' => 401],401);

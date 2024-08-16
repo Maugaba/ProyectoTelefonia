@@ -93,7 +93,7 @@ export class CreateProductBatchesComponent implements OnInit {
                 title: 'Lote',
                 text: 'Lote creado correctamente'
               });
-              this.router.navigate(['/products']);
+              this.router.navigate(['/product_batches']);
             }
             else {
               Swal.fire({
