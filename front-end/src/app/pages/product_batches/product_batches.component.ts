@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductBatchesService } from './product_batches.service';
-import { ProductService } from '../products/product.service'; // Usa ProductService aquí
+import { ProductService } from '../products/product.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationExtras, RouterModule } from '@angular/router';
@@ -18,11 +18,13 @@ export class ProductBatchesComponent implements OnInit {
   filteredBatches: any[] = [];
   products: any[] = [];
   searchText: string = '';
-  selectedStatus: string = 'Activo'; // Actualizado
+  selectedStatus: string = 'Activo';
+  startDate: string = ''; // Inicializa con un valor vacío
+  endDate: string = '';   // Inicializa con un valor vacío
 
   constructor(
     private productBatchesService: ProductBatchesService, 
-    private productService: ProductService, // Cambiado a ProductService
+    private productService: ProductService, 
     private router: Router
   ) {}
 
@@ -35,10 +37,9 @@ export class ProductBatchesComponent implements OnInit {
     const estado = this.selectedStatus === 'todos' ? '' : this.selectedStatus;
     this.productBatchesService.getProductBatches(estado).subscribe(
       (data) => {
-        console.log('Data received:', data); // Verificar los datos recibidos
         this.productBatches = data.data;
         this.filteredBatches = this.productBatches;
-        this.filterProductBatches();
+        this.filterProductBatches(); // Aplicar filtros al inicio
       },
       (error) => {
         console.error('Error fetching product batches:', error);
@@ -47,7 +48,7 @@ export class ProductBatchesComponent implements OnInit {
   }
 
   fetchProducts(): void {
-    this.productService.getProduct(this.selectedStatus).subscribe( // Cambiado a productService
+    this.productService.getProduct(this.selectedStatus).subscribe(
       (data) => {
         this.products = data.data;
       },
@@ -63,23 +64,32 @@ export class ProductBatchesComponent implements OnInit {
   }
 
   filterProductBatches(): void {
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+
     this.filteredBatches = this.productBatches.filter(batch => {
-      const productId = batch.product_id; // Actualizado
-      const batchNumber = batch.batch_number; // Actualizado
-      const expirationDate = batch.expiration_date; // Actualizado
+      const productId = batch.product_id;
+      const batchNumber = batch.batch_number;
+      const expirationDate = new Date(batch.expiration_date); // Convertir fecha a objeto Date
       const quantity = batch.quantity;
       const state = batch.state;
 
       const searchText = this.searchText.toLowerCase();
-      
-      return this.getProductName(productId).toLowerCase().includes(searchText) || 
-        batchNumber.toLowerCase().includes(searchText) || 
-        expirationDate.toLowerCase().includes(searchText) || 
-        quantity.toString().includes(searchText) || 
-        state.toLowerCase().includes(searchText);
+
+      const matchesSearchText = this.getProductName(productId).toLowerCase().includes(searchText) || 
+                                batchNumber.toLowerCase().includes(searchText) || 
+                                expirationDate.toLocaleDateString().includes(searchText) || 
+                                quantity.toString().includes(searchText) || 
+                                state.toLowerCase().includes(searchText);
+
+      // Filtra por fechas si están seleccionadas
+      const withinDateRange = (!this.startDate || expirationDate >= start) &&
+                              (!this.endDate || expirationDate <= end);
+
+      return matchesSearchText && withinDateRange;
     });
   }
-  
+
   onSearchTextChange(): void {
     this.filterProductBatches();
   }
@@ -88,7 +98,7 @@ export class ProductBatchesComponent implements OnInit {
     this.fetchProductBatches();
   }
 
-  toggleBatchState(id: number): void { // Actualizado
+  toggleBatchState(id: number): void {
     this.productBatchesService.toggleBatchState(id).subscribe(
       (response) => {
         Swal.fire({
@@ -115,5 +125,10 @@ export class ProductBatchesComponent implements OnInit {
       },
     };
     this.router.navigate(['product_batches/view'], navigationExtras);
+  }
+
+  // Se llama cuando cambia la fecha de inicio o fin
+  onDateChange(): void {
+    this.filterProductBatches(); // Filtrar en el cliente
   }
 }

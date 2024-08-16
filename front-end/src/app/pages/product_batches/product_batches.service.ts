@@ -10,6 +10,7 @@ export class ProductBatchesService {
   private allUrl = `${API_URL}/api/productbatches/all`; // Actualizado
   private createUrl = `${API_URL}/api/productbatches/register`; // Actualizado
   private toggleStateUrl = `${API_URL}/api/productbatches/change`; // Actualizado
+  private filterUrl = `${API_URL}/api/productbatches/filter`;
 
   private apiUrl = `${API_URL}/api/products/all`;
 
@@ -53,4 +54,16 @@ export class ProductBatchesService {
 
     return this.http.get<any>(`${this.toggleStateUrl}/${id}`, { headers });
   }
+
+  filterProductBatchesByDate(startDate: string, endDate: string): Observable<any> {
+    const token = localStorage.getItem('angular17token');
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Accept', 'application/json');
+  
+    const body = { start_date: startDate, end_date: endDate };
+  
+    return this.http.post<any>(this.filterUrl, body.toString(), { headers });
+    
+  }  
 }
