@@ -3,23 +3,49 @@ import { DOCUMENT } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
+import { SupplierService } from '../../suppliers/supplier.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-
 
 declare var KTWizard: any; // Declara la variable para evitar errores de TypeScript
 declare var KTUtil: any; // Declara la variable para evitar errores de TypeScript
 
 @Component({
-  selector: 'app-create-product', 
+  selector: 'app-create-product',
   standalone: true,
   templateUrl: './create-product.component.html',
   styleUrls: ['./create-product.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
-export class CreateProductComponent{
+export class CreateProductComponent implements OnInit {
   private _wizardObj: any;
   private _formEl: any;
+
+  productsForm: FormGroup;
+  suppliers: any[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+    private supplierService: SupplierService,
+    private router: Router,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    this.productsForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      price: ['', Validators.required],
+      quantity: ['', Validators.required],
+      sku: ['', Validators.required],
+      type: ['', Validators.required],
+      supplier_id: ['', Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    this.fetchSuppliers();
+  }
 
   ngAfterViewInit(): void {
     this.initWizard();
@@ -56,7 +82,7 @@ export class CreateProductComponent{
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Por favor, ingrese una direccion válido'
+            text: 'Por favor, ingrese una dirección válida'
           });
           return;
         }
@@ -79,7 +105,7 @@ export class CreateProductComponent{
               Swal.fire({
                 icon: 'success',
                 title: 'Producto',
-                text: 'Product creado correctamente'
+                text: 'Producto creado correctamente'
               });
               this.router.navigate(['/products']);
             }
@@ -87,15 +113,15 @@ export class CreateProductComponent{
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Ha ocurrido un error al crear el producto' + response.error
+                text: 'Ha ocurrido un error al crear el producto: ' + response.error
               });
             }
           },
-          (response) => {
+          (error) => {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Ha ocurrido un error al crear el producto' + response.error.error
+              text: 'Ha ocurrido un error al crear el producto: ' + error.error.error
             });
           }
         );
@@ -104,29 +130,20 @@ export class CreateProductComponent{
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Por favor, tiene errores en su formulario'
+          text: 'Por favor, revise los errores en su formulario'
         });
       }
     });
   }
 
-  productsForm: FormGroup;
-
-  constructor(
-    private fb: FormBuilder,
-    private productService: ProductService,
-    private router: Router,
-    private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document
-  ) {
-    this.productsForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      price: ['', Validators.required],
-      quantity: ['', Validators.required],
-      sku: ['', Validators.required],
-      type: ['', Validators.required],
-      supplier_id: ['', Validators.required],
-    });
+  fetchSuppliers(): void {
+    this.supplierService.getSupplier('Activo').subscribe(
+      (data) => {
+        this.suppliers = data.data;
+      },
+      (error) => {
+        console.error('Error fetching suppliers:', error);
+      }
+    );
   }
 }

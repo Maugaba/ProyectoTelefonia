@@ -159,9 +159,13 @@
 													</div>
 													<!--begin::Form Group-->
 													<div class="form-group">
-														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">ID Proveedor</label>
-														<input type="number" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="supplier_id" formControlName="supplier_id" placeholder="ID Proveedor" value="" />
-													</div>      
+														<label class="font-size-h6 font-weight-bolder text-dark" id="txtLabel">Proveedor</label>
+														<select class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="supplier_id" formControlName="supplier_id">
+														  <option *ngFor="let supplier of suppliers" [value]="supplier.id" [selected]="supplier.id === productForm.value.supplier_id">
+															{{ supplier.name }}
+														  </option>
+														</select>
+													  </div>													   
 													<!--begin::Row-->
 												</div>
 												<!--end: Wizard Step 2-->

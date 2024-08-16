@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
+import { SupplierService } from '../../suppliers/supplier.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
@@ -10,7 +11,7 @@ declare var KTWizard: any; // Declara la variable para evitar errores de TypeScr
 declare var KTUtil: any; // Declara la variable para evitar errores de TypeScript
 
 @Component({
-  selector: 'app-edit-product', 
+  selector: 'app-edit-product',
   standalone: true,
   templateUrl: './edit-product.component.html',
   styleUrls: ['./edit-product.component.css'],
@@ -20,14 +21,36 @@ export class EditProductComponent implements OnInit {
   productForm: FormGroup;
   product: any;
   productId: number;
+  suppliers: any[] = []; // Añadido para almacenar proveedores
   private _wizardObj: any;
   private _formEl: any;
 
-  ngAfterViewInit(): void {
-    this.initWizard();
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+    private supplierService: SupplierService,
+    private router: Router,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    this.productForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      price: ['', Validators.required],
+      quantity: ['', Validators.required],
+      sku: ['', Validators.required],
+      type: ['', Validators.required],
+      supplier_id: ['', Validators.required]
+    });
+
+    // Obtener el producto de la navegación
+    const navigation = this.router.getCurrentNavigation();
+    this.product = navigation?.extras?.state?.['product'];
+    this.productId = this.product?.id || 0; // Inicializar productId en el constructor
   }
 
-  ngOnInit(): void {  
+  ngOnInit(): void {
+    this.fetchSuppliers();
     if (this.product) {
       this.productForm.patchValue({
         name: this.product.name,
@@ -39,6 +62,10 @@ export class EditProductComponent implements OnInit {
         supplier_id: this.product.supplier_id
       });
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.initWizard();
   }
 
   private initWizard() {
@@ -55,10 +82,29 @@ export class EditProductComponent implements OnInit {
 
       // Validar el formulario en cada paso
       if (step === 1) {
-        const description = this.productForm.value.description;
         const name = this.productForm.value.name;
-        // Agregar validaciones o lógica específica para el paso 1
-      } else if (step === 2) {
+        const description = this.productForm.value.description;
+        const hasNumber = /\d/.test(name);
+        if (!name || hasNumber) {
+          wizard.stop(); // Detener la navegación
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor, ingrese un nombre válido'
+          });
+          return;
+        }
+        if (!description) {
+          wizard.stop(); // Detener la navegación
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor, ingrese una descripción válida'
+          });
+          return;
+        }
+      }
+      if (step === 2) {
         const price = this.productForm.value.price;
         const quantity = this.productForm.value.quantity;
         const sku = this.productForm.value.sku;
@@ -84,15 +130,15 @@ export class EditProductComponent implements OnInit {
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Ha ocurrido un error al modificar el producto' + response.error
+                text: 'Ha ocurrido un error al modificar el producto: ' + response.error
               });
             }
           },
-          (response) => {
+          (error) => {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Ha ocurrido un error al modificar el producto' + response.error.error
+              text: 'Ha ocurrido un error al modificar el producto: ' + error.error.error
             });
           }
         );
@@ -100,30 +146,20 @@ export class EditProductComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Por favor, tiene errores en su formulario'
+          text: 'Por favor, revise los errores en su formulario'
         });
       }
     });
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private productService: ProductService,
-    private router: Router,
-    private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document
-  ) {
-    this.productForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      price: ['', Validators.required],
-      quantity: ['', Validators.required],
-      sku: ['', Validators.required],
-      type: ['', Validators.required],
-      supplier_id: ['', Validators.required]
-    });
-    const navigation = this.router.getCurrentNavigation();
-    this.product = navigation?.extras?.state?.['product'];
-    this.productId = this.product?.id || 0; // Inicializar productId en el constructor
+  fetchSuppliers(): void {
+    this.supplierService.getSupplier('Activo').subscribe(
+      (data) => {
+        this.suppliers = data.data;
+      },
+      (error) => {
+        console.error('Error fetching suppliers:', error);
+      }
+    );
   }
 }
