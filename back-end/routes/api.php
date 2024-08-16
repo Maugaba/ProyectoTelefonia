@@ -54,9 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/all', 'App\Http\Controllers\productbatchesController@get_all')->name('productbatches.all');
         Route::post('/register', 'App\Http\Controllers\productbatchesController@register')->name('productbatches.register');
         Route::get('/change/{id}', 'App\Http\Controllers\productbatchesController@change')->name('productbatches.change');
-        Route::post('/update/{id}', 'App\Http\Controllers\productbatchesController@update')->name('productbatches.update');
         Route::post('/productbatches/filter', 'App\Http\Controllers\productbatchesController@filter_by_date')->name('productbatches.filter');
-
     });
     
 });

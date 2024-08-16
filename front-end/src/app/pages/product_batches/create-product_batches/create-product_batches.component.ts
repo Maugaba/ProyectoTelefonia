@@ -16,10 +16,10 @@ declare var KTUtil: any; // Declara la variable para evitar errores de TypeScrip
   styleUrls: ['./create-product_batches.component.css'],
   imports: [CommonModule, ReactiveFormsModule]
 })
-export class CreateProductBatchesComponent implements OnInit { // Ajusta el nombre del componente
+export class CreateProductBatchesComponent implements OnInit {
   productBatchesForm: FormGroup;
   products: { id: number, name: string, price: number }[] = [];
-  
+
   constructor(
     private fb: FormBuilder,
     private productBatchesService: ProductBatchesService, // Asegúrate de usar el servicio correcto
@@ -29,13 +29,17 @@ export class CreateProductBatchesComponent implements OnInit { // Ajusta el nomb
   ) {
     this.productBatchesForm = this.fb.group({
       product_id: ['', Validators.required],
+      batch_number: ['', Validators.required],
+      expiration_date: ['', Validators.required],
       quantity: [1, Validators.required],
-      // Agrega otros campos necesarios para el lote de productos
+      state: ['Activo'], // Estado predeterminado
+      items: this.fb.array([]),
+      total_amount: [0]
     });
   }
 
   ngOnInit() {
-    this.productBatchesService.getProduct('Activo').subscribe(productsList => {
+    this.productBatchesService.getProductBatches('Activo').subscribe(productsList => {
       this.products = productsList.data;
     });
   }
@@ -44,8 +48,8 @@ export class CreateProductBatchesComponent implements OnInit { // Ajusta el nomb
     return this.fb.group({
       product_id: ['', Validators.required],
       quantity: [1, Validators.required],
-      unit_price: [0, Validators.required],
-      total_price: [0, Validators.required]
+      unit_price: [{ value: 0, disabled: true }, Validators.required],
+      total_price: [{ value: 0, disabled: true }]
     });
   }
 
@@ -55,26 +59,23 @@ export class CreateProductBatchesComponent implements OnInit { // Ajusta el nomb
 
   onProductSelect(index: number) {
     const control = this.items.at(index);
-    const selectedProduct = this.products.find(p => p.id == control.get('product_id')?.value);
+    const selectedProduct = this.products.find(p => p.id === control.get('product_id')?.value);
 
     if (selectedProduct) {
-      control.get('unit_price')?.enable(); // Habilitar el control
-      control.patchValue({
-        unit_price: selectedProduct.price,
-        total_price: selectedProduct.price * control.get('quantity')?.value
-      });
+      control.get('unit_price')?.setValue(selectedProduct.price, { emitEvent: false });
+      control.get('total_price')?.setValue(selectedProduct.price * control.get('quantity')?.value, { emitEvent: false });
     }
 
-    this.calculateTotalAmount(); // Update the total amount
+    this.calculateTotalAmount();
   }
 
   updateTotalPrice(index: number) {
     const control = this.items.at(index);
     const unitPrice = control.get('unit_price')?.value || 0;
     const quantity = control.get('quantity')?.value || 0;
-  
-    control.patchValue({ total_price: unitPrice * quantity });
-    this.calculateTotalAmount(); // Update the total amount
+
+    control.get('total_price')?.setValue(unitPrice * quantity, { emitEvent: false });
+    this.calculateTotalAmount();
   }
 
   addItem(): void {
@@ -83,7 +84,7 @@ export class CreateProductBatchesComponent implements OnInit { // Ajusta el nomb
 
   removeItem(index: number): void {
     this.items.removeAt(index);
-    this.calculateTotalAmount(); // Update the total amount
+    this.calculateTotalAmount();
   }
 
   calculateTotalAmount() {
@@ -93,7 +94,7 @@ export class CreateProductBatchesComponent implements OnInit { // Ajusta el nomb
       const totalPrice = parseFloat(item.total_price);
       total += isNaN(totalPrice) ? 0 : totalPrice;
     });
-    
+
     this.productBatchesForm.patchValue({ total_amount: total });
   }
 
@@ -102,7 +103,7 @@ export class CreateProductBatchesComponent implements OnInit { // Ajusta el nomb
       this.productBatchesService.createProductBatch(this.productBatchesForm.value).subscribe(
         (response) => {
           Swal.fire('Lote creado', 'El lote ha sido creado con éxito', 'success');
-          this.router.navigate(['/product-batches']);
+          this.router.navigate(['/product_batches']);
         },
         (error) => {
           Swal.fire('Error', 'Ocurrió un error al crear el lote: ' + error.error.error, 'error');

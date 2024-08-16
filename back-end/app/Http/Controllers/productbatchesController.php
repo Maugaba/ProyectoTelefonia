@@ -82,32 +82,6 @@ class productbatchesController extends Controller
         return response()->json(['message' => 'Error al actualizar el estado', 'status' => 401],401);
     }
 
-    public function update(Request $request, $id){
-        $productbatche = Productbatches::findOrFail($id);
-        if($productbatche){
-            try {
-                $productbatche->product_id = $_POST['product_id'];
-                $productbatche->batch_number = $_POST['batch_number'];
-                $productbatche->expiration_date = $_POST['expiration_date'];
-                $productbatche->quantity = $_POST['quantity'];
-                $productbatche->save();
-                return response()->json(['success' => 'Lote actualizado correctamente', 'status' => 200],200);
-            } catch (QueryException $e) {
-                return response()->json([
-                    'message' => 'Error en la base de datos al actualizar el lote',
-                    'error' => $e->getMessage(),
-                    'status' => 500
-                ], 500);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'message' => 'Error inesperado al actualizar el lote',
-                    'error' => $e->getMessage(),
-                    'status' => 500
-                ], 500);
-            }
-        }
-        return response()->json(['message' => 'Error al actualizar el producto', 'status' => 401],401);
-    }
 
     // Funcion para filtrar los lotes por fecha de expiracion
     public function filter_by_date(Request $request)

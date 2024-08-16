@@ -1,122 +1,97 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductbacheService } from './product_batches.service';
+import { ProductBatchesService } from './product_batches.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, NavigationExtras, RouterModule} from '@angular/router';
+import { Router, NavigationExtras, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-
 
 @Component({
-  selector: 'app-product',
+  selector: 'app-product-batches',
   templateUrl: './product_batches.component.html',
   styleUrls: ['./product_batches.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, MatDatepickerModule, MatFormFieldModule, MatInputModule]
+  imports: [CommonModule, FormsModule, RouterModule]
 })
-export class ProductbatcheComponent implements OnInit {
-  productbatches: any[] = [];
-  filteredProductbatches: any[] = [];
+export class ProductBatchesComponent implements OnInit {
+  productBatches: any[] = [];
+  filteredBatches: any[] = [];
   searchText: string = '';
-  selectedStatus: string = 'Activo'; 
+  selectedStatus: string = 'Activo'; // Actualizado
 
-  constructor(private productbatchService: ProductbacheService, private router: Router) {}
+  constructor(private productBatchesService: ProductBatchesService, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchProductbatches();
+    this.fetchProductBatches();
   }
 
-  fetchProductbatches(): void {
+  fetchProductBatches(): void {
     const estado = this.selectedStatus === 'todos' ? '' : this.selectedStatus;
-    this.productbatchService.getProductbatch(estado).subscribe(
+    this.productBatchesService.getProductBatches(estado).subscribe(
       (data) => {
-        this.productbatches = data.data;
-        this.filteredProductbatches = this.productbatches;
-        this.filterProductbatches();
-      },
-      (error) => {
-        console.error('Error fetching products:', error);
-      }
-    );
-  }
-
-  filterProductbatches(): void {
-    this.filteredProductbatches = this.productbatches.filter(productbatch => {
-      const product_id = productbatch.product_id ? productbatch.product_id.toLowerCase() : '';
-      const batch_number = productbatch.batch_number ? productbatch.batch_number.toLowerCase() : '';
-      const expiration_date = productbatch.expiration_date ? productbatch.expiration_date.toLowerCase() : '';
-      const quantity = productbatch.quantity ? productbatch.quantity.toLowerCase() : '';
-      
-      const searchText = this.searchText.toLowerCase();
-      
-      return product_id.includes(searchText) ||
-        batch_number.includes(searchText) ||
-        expiration_date.includes(searchText) ||
-        quantity.includes(searchText);
-    });
-  }
-  
-
-  onSearchTextChange(): void {
-    this.filterProductbatches();
-  }
-
-  onStatusChange(): void {
-    this.fetchProductbatches();
-  }
-
-  editProductbatch(productbatch: any): void {
-    const navigationExtras: NavigationExtras = {
-      state: {
-        productbatch
-      }
-    };
-    this.router.navigate(['/productbatches/edit'], navigationExtras);
-  }
-
-  changeState(id: number): void {
-    this.productbatchService.changeState(id).subscribe(
-      (response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Estado',
-          text: 'Estado actualizado correctamente'})
-        this.fetchProductbatches();
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error al actualizar el estado'+ error})   
-      }
-    );
-  }
-
-  //Filtro de Lotes
-  dateRange: { start: Date | null, end: Date | null } = { start: null, end: null };
-
-filterByDate(): void {
-  if (this.dateRange.start && this.dateRange.end) {
-    const formattedStartDate = this.formatDate(this.dateRange.start);
-    const formattedEndDate = this.formatDate(this.dateRange.end);
-
-    this.productbatchService.filterProductbatch(formattedStartDate, formattedEndDate, this.selectedStatus).subscribe(
-      (data) => {
-        this.productbatches = data.data;
-        this.filteredProductbatches = this.productbatches;
+        console.log('Data received:', data); // Verificar los datos recibidos
+        this.productBatches = data.data;
+        this.filteredBatches = this.productBatches;
+        this.filterProductBatches();
       },
       (error) => {
         console.error('Error fetching product batches:', error);
       }
     );
   }
-}
-
-formatDate(date: Date): string {
-  return date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-}
-
   
+
+  filterProductBatches(): void {
+    this.filteredBatches = this.productBatches.filter(batch => {
+      const productId = batch.product_id; // Actualizado
+      const batchNumber = batch.batch_number; // Actualizado
+      const expirationDate = batch.expiration_date; // Actualizado
+      const quantity = batch.quantity;
+      const state = batch.state;
+
+      const searchText = this.searchText.toLowerCase();
+      
+      return productId.toString().includes(searchText) || 
+        batchNumber.toLowerCase().includes(searchText) || 
+        expirationDate.toLowerCase().includes(searchText) || 
+        quantity.toString().includes(searchText) || 
+        state.toLowerCase().includes(searchText);
+    });
+  }
+  
+  onSearchTextChange(): void {
+    this.filterProductBatches();
+  }
+
+  onStatusChange(): void {
+    this.fetchProductBatches();
+  }
+
+  toggleBatchState(id: number): void { // Actualizado
+    this.productBatchesService.toggleBatchState(id).subscribe(
+      (response) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Estado',
+          text: 'Estado del lote actualizado correctamente'
+        });
+        this.fetchProductBatches();
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al actualizar el estado del lote: ' + error
+        });
+      }
+    );
+  }
+
+  viewBatch(batch: any): void {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        batch,
+      },
+    };
+    this.router.navigate(['product_batches/view'], navigationExtras);
+  }
 }

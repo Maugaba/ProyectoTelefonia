@@ -32,8 +32,8 @@ import { ViewSaleComponent } from './pages/sales/view-sale/view-sale.component';
 
 
 // Product Batches Routes
-import { ProductbatcheComponent } from './pages/product_batches/product_batches.component';
-//import { CreateProductBatchesComponent } from './pages/product_batches/create-product_batches/create-product_batches.component';
+import { ProductBatchesComponent } from './pages/product_batches/product_batches.component';
+import { CreateProductBatchesComponent } from './pages/product_batches/create-product_batches/create-product_batches.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -129,17 +129,12 @@ export const routes: Routes = [
       },
       {
         path: 'product_batches',
-        component: ProductbatcheComponent,
+        component: ProductBatchesComponent,
         canActivate: [authGuard],
       },
-      //{
-      //  path: 'product_batches/create',
-        //component: CreateProductBatchesComponent,
-      //  canActivate: [authGuard],
-      //},
       {
-        path: 'product_batches/edit',
-        component: EditProductComponent,
+        path: 'product_batches/create',
+        component: CreateProductBatchesComponent,
         canActivate: [authGuard],
       },
     ],
