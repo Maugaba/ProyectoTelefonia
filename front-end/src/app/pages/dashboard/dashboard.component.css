@@ -1,0 +1,18 @@
+.dashboard-container {
+    background-image: url('../../../../public/assets/media/imagenes/mesoBackgroundDashboard4.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 79vh; /* Ajustar la altura según sea necesario */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-content {
+    background-color: rgba(255, 255, 255, 0.8); /* Color de fondo semi-transparente */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+

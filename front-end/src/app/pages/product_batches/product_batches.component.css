@@ -1,0 +1,32 @@
+/* Estilo para hacer los botones más minimalistas con íconos */
+.btn {
+    color: white;
+    background-color: #012A15;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #012A15;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.p-0 {
+    padding: 0 !important;
+}
+
+#kt_content .content {
+    color: green !important;
+}
+
+/* Estilos para los encabezados de la tabla */
+.table thead th {
+    background-color: #012A15; /* Cambiar el color de fondo a verde */
+    color: white; /* Cambiar el color del texto a blanco */
+}
