@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ProductBatchesService } from '../product_batches.service'; // Asegúrate de usar el servicio correcto
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { ProductService } from '../../products/product.service';
 
 declare var KTWizard: any; // Declara la variable para evitar errores de TypeScript
 declare var KTUtil: any; // Declara la variable para evitar errores de TypeScript
@@ -17,12 +18,16 @@ declare var KTUtil: any; // Declara la variable para evitar errores de TypeScrip
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class CreateProductBatchesComponent implements OnInit {
+  private _wizardObj: any;
+  private _formEl: any;
+
   productBatchesForm: FormGroup;
-  products: { id: number, name: string, price: number }[] = [];
+  products: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private productBatchesService: ProductBatchesService, // Asegúrate de usar el servicio correcto
+    private productService: ProductService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
@@ -31,86 +36,100 @@ export class CreateProductBatchesComponent implements OnInit {
       product_id: ['', Validators.required],
       batch_number: ['', Validators.required],
       expiration_date: ['', Validators.required],
-      quantity: [1, Validators.required],
-      state: ['Activo'], // Estado predeterminado
-      items: this.fb.array([]),
-      total_amount: [0]
+      quantity: ['', Validators.required],
     });
   }
 
-  ngOnInit() {
-    this.productBatchesService.getProductBatches('Activo').subscribe(productsList => {
-      this.products = productsList.data;
+  ngOnInit(): void {
+    this.fetchProducts();
+  }
+
+  ngAfterViewInit(): void {
+    this.initWizard();
+  }
+
+  private initWizard() {
+    this._wizardObj = new KTWizard('kt_wizard', {
+      startStep: 1,
+      clickableSteps: false
     });
-  }
+    this._formEl = KTUtil.getById('kt_form');
+    this._wizardObj.on('change', (wizard: any) => {
+      if (wizard.getStep() > wizard.getNewStep()) {
+        return; // Skip if stepped back
+      }
+      const step = wizard.getStep();
 
-  createItem(): FormGroup {
-    return this.fb.group({
-      product_id: ['', Validators.required],
-      quantity: [1, Validators.required],
-      unit_price: [{ value: 0, disabled: true }, Validators.required],
-      total_price: [{ value: 0, disabled: true }]
-    });
-  }
-
-  get items(): FormArray {
-    return this.productBatchesForm.get('items') as FormArray;
-  }
-
-  onProductSelect(index: number) {
-    const control = this.items.at(index);
-    const selectedProduct = this.products.find(p => p.id === control.get('product_id')?.value);
-
-    if (selectedProduct) {
-      control.get('unit_price')?.setValue(selectedProduct.price, { emitEvent: false });
-      control.get('total_price')?.setValue(selectedProduct.price * control.get('quantity')?.value, { emitEvent: false });
-    }
-
-    this.calculateTotalAmount();
-  }
-
-  updateTotalPrice(index: number) {
-    const control = this.items.at(index);
-    const unitPrice = control.get('unit_price')?.value || 0;
-    const quantity = control.get('quantity')?.value || 0;
-
-    control.get('total_price')?.setValue(unitPrice * quantity, { emitEvent: false });
-    this.calculateTotalAmount();
-  }
-
-  addItem(): void {
-    this.items.push(this.createItem());
-  }
-
-  removeItem(index: number): void {
-    this.items.removeAt(index);
-    this.calculateTotalAmount();
-  }
-
-  calculateTotalAmount() {
-    const itemsArray = this.items.value as { total_price: any }[] || [];
-    let total = 0;
-    itemsArray.forEach(item => {
-      const totalPrice = parseFloat(item.total_price);
-      total += isNaN(totalPrice) ? 0 : totalPrice;
-    });
-
-    this.productBatchesForm.patchValue({ total_amount: total });
-  }
-
-  onSubmit() {
-    if (this.productBatchesForm.valid) {
-      this.productBatchesService.createProductBatch(this.productBatchesForm.value).subscribe(
-        (response) => {
-          Swal.fire('Lote creado', 'El lote ha sido creado con éxito', 'success');
-          this.router.navigate(['/product_batches']);
-        },
-        (error) => {
-          Swal.fire('Error', 'Ocurrió un error al crear el lote: ' + error.error.error, 'error');
+      // Validar el formulario en cada paso
+      if (step === 1) {
+        const product_id = this.productBatchesForm.value.product_id;
+        const batch_number = this.productBatchesForm.value.batch_number;
+        
+        if (!batch_number) {
+          wizard.stop(); // Detener la navegación
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor, ingrese un numero válida'
+          });
+          return;
         }
-      );
-    } else {
-      Swal.fire('Error', 'Por favor, complete el formulario', 'error');
-    }
+      }
+
+      if (step === 2) {
+        const expiration_date = this.productBatchesForm.value.expiration_date;
+        const quantity = this.productBatchesForm.value.quantity;
+       
+      }
+    });
+    this._wizardObj.on('submit', (wizard: any) => {
+      console.log(this.productBatchesForm.value);
+      if (this.productBatchesForm.valid) {
+        this.productBatchesService.createProductBatch(this.productBatchesForm.value).subscribe(
+          (response) => {
+            if(response.status === 200) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Lote',
+                text: 'Lote creado correctamente'
+              });
+              this.router.navigate(['/products']);
+            }
+            else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ha ocurrido un error al crear el lote: ' + response.error
+              });
+            }
+          },
+          (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ha ocurrido un error al crear el lote: ' + error.error.error
+            });
+          }
+        );
+      }
+      else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor, revise los errores en su formulario'
+        });
+      }
+    });
+  }
+
+  fetchProducts(): void {
+    this.productService.getProduct('Activo').subscribe(
+      (data) => {
+        this.products = data.data;
+      },
+      (error) => {
+        console.error('Error fetching products:', error);
+      }
+    );
   }
 }
